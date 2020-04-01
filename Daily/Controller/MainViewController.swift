@@ -12,12 +12,18 @@ import JTAppleCalendar
 class MainViewController: UIViewController {
 
     // MARK: - Properties
-    private let cellIdentifier = "dateCell"
+    private let cellIdentifier = "DateCell"
+    private let headerIdentifier = "DateHeader"
+    
+    let formatter = DateFormatter()
     
     private let monthView: JTACMonthView = {
-        let view = JTACMonthView()
-        view.backgroundColor = .white
-        return view
+        let calendar = JTACMonthView()
+        calendar.backgroundColor = .white
+        calendar.scrollDirection = .horizontal
+        calendar.scrollingMode = .stopAtEachCalendarFrame
+        calendar.showsHorizontalScrollIndicator = false
+        return calendar
     }()
     
     
@@ -29,14 +35,19 @@ class MainViewController: UIViewController {
 //        print("init vc...")
         
         view.backgroundColor = .white
+//        view.backgroundColor = UIColor(hexRGB: "#341f97")
+        
+        formatter.dateFormat = "MMM"
         
         // Register cell
         monthView.register(DateCell.self, forCellWithReuseIdentifier: cellIdentifier)
+        monthView.register(DateHeader.self, forSupplementaryViewOfKind: JTACMonthView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier)
         
         // Set up delegate
         monthView.calendarDelegate = self
         monthView.calendarDataSource = self
         //monthView.ibCalendarDelegate
+        
         
         // !!!
 //        monthView.contentInsetAdjustmentBehavior = .never
@@ -46,10 +57,10 @@ class MainViewController: UIViewController {
         // Add month view
         view.addSubview(monthView)
         monthView.anchor(top: view.topAnchor,
-                         left: view.leftAnchor,
-                         right: view.rightAnchor,
                          paddingTop: 30,
-                         height: view.frame.width / 7 * 6)
+                         leading: view.leadingAnchor,
+                         trailing: view.trailingAnchor,
+                         height: view.frame.width / 7 * 6 + 50) // 50 - height of header
         monthView.minimumLineSpacing = 0
         monthView.minimumInteritemSpacing = 0
         //monthView.isUserInteractionEnabled = true
@@ -87,7 +98,7 @@ extension MainViewController: JTACMonthViewDataSource {
         return config
     }
     
-    
+
 }
 
 
@@ -143,6 +154,7 @@ extension MainViewController: JTACMonthViewDelegate {
         cell.dateLabel.text = cellState.text
     }
     
+    
     func calendar(_ calendar: JTACMonthView, didSelectDate date: Date, cell: JTACDayCell?, cellState: CellState, indexPath: IndexPath) {
         let cell = cell as! DateCell
         print("trying to select day: \(cell.dateLabel.text!)")
@@ -161,5 +173,19 @@ extension MainViewController: JTACMonthViewDelegate {
         */
     }
 
+    
+    func calendar(_ calendar: JTACMonthView, headerViewForDateRange range: (start: Date, end: Date), at indexPath: IndexPath) -> JTACMonthReusableView {
+
+        print("header")
+        let header = calendar.dequeueReusableJTAppleSupplementaryView(withReuseIdentifier: headerIdentifier, for: indexPath) as! DateHeader
+        header.monthTitle.text = formatter.string(from: range.start)
+        print("return header -> \(header.monthTitle.text)")
+        return header
+    }
+    
+    func calendarSizeForMonths(_ calendar: JTACMonthView?) -> MonthSize? {
+        return MonthSize(defaultSize: 50)
+    }
+    
 }
 
