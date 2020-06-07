@@ -18,6 +18,7 @@ class DateCell: JTACDayCell { //JTACMonthCell
         return label
     }()
     
+    
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -39,14 +40,12 @@ class DateCell: JTACDayCell { //JTACMonthCell
 //        dateLabel.translatesAutoresizingMaskIntoConstraints = false
 //        dateLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
 //        dateLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-
-        
         
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
     
 }

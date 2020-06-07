@@ -18,6 +18,7 @@ class DateHeader: JTACMonthReusableView {
         return label
     }()
 
+    
     // MARK: Init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,8 +29,9 @@ class DateHeader: JTACMonthReusableView {
         monthTitle.anchor(centerX: centerXAnchor, centerY: centerYAnchor)
     }
     
+    
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
 }

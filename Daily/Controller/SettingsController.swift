@@ -10,25 +10,46 @@ import UIKit
 
 class SettingsController: UIViewController {
 
+    // MARK: - Properties
+    private let topImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.backgroundColor = .white
+        return imageView
+    }()
+    
     private let headerLabel: UILabel = {
         let label = UILabel()
         label.text = "Settings"
         return label
     }()
     
+    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
 //        title = "Settings"
-        view.backgroundColor = .yellow
+        view.backgroundColor = .systemTeal
         
-        view.addSubview(headerLabel)
-        headerLabel.anchor(top: view.topAnchor,
-                           paddingTop: 50,
-                           centerX: view.centerXAnchor)
+        setupView()
     }
     
 
+    // MARK: - Methods
+    private func setupView() {
+        // Add top image
+        view.addSubview(topImage)
+        topImage.anchor(top: view.topAnchor,
+                        leading: view.leadingAnchor,
+                        trailing: view.trailingAnchor,
+                        height: 150)
+        
+        // Add month label
+        topImage.addSubview(headerLabel)
+        headerLabel.anchor(top: topImage.topAnchor, paddingTop: 50,
+                          centerX: topImage.centerXAnchor)
+    }
+    
     /*
     // MARK: - Navigation
 

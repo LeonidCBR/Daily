@@ -15,9 +15,28 @@ class MainViewController: UIViewController {
     private let cellIdentifier = "DateCell"
     private let headerIdentifier = "DateHeader"
     
-    let formatter = DateFormatter()
+    private let topImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.backgroundColor = .white
+        return imageView
+    }()
     
-    private let monthView: JTACMonthView = {
+    private let monthLabel: UILabel = {
+        let label = UILabel()
+        label.text = "MONTH"
+        return label
+    }()
+    
+    private let newEventButton: UIButton = {
+        let button = UIButton()
+        button.setImage(.add, for: .normal)
+//        button.tintColor = .red
+//        button.backgroundColor = .systemPink
+        button.addTarget(self, action: #selector(addEvent), for: .touchUpInside)
+        return button
+    }()
+    
+    private let calendarView: JTACMonthView = {
         let calendar = JTACMonthView()
         calendar.backgroundColor = .white
         calendar.scrollDirection = .horizontal
@@ -25,6 +44,14 @@ class MainViewController: UIViewController {
         calendar.showsHorizontalScrollIndicator = false
         return calendar
     }()
+    
+    private let eventsTable: UITableView = {
+        let tableView = UITableView()
+        tableView.backgroundColor = .systemTeal
+        return tableView
+    }()
+    
+    let formatter = DateFormatter()
     
     
     // MARK: - Lifecycle
@@ -35,39 +62,109 @@ class MainViewController: UIViewController {
 //        print("init vc...")
         
 //        title = "Main"
-        view.backgroundColor = .white
+        view.backgroundColor = .systemTeal
 //        view.backgroundColor = UIColor(hexRGB: "#341f97")
         
         formatter.dateFormat = "MMM"
         
         // Register cell
-        monthView.register(DateCell.self, forCellWithReuseIdentifier: cellIdentifier)
-        monthView.register(DateHeader.self, forSupplementaryViewOfKind: JTACMonthView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier)
+        calendarView.register(DateCell.self, forCellWithReuseIdentifier: cellIdentifier)
+        calendarView.register(DateHeader.self, forSupplementaryViewOfKind: JTACMonthView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier)
         
         // Set up delegate
-        monthView.calendarDelegate = self
-        monthView.calendarDataSource = self
-        //monthView.ibCalendarDelegate
+        calendarView.calendarDelegate = self
+        calendarView.calendarDataSource = self
+        //calendarView.ibCalendarDelegate
         
         
         // !!!
-//        monthView.contentInsetAdjustmentBehavior = .never
+//        calendarView.contentInsetAdjustmentBehavior = .never
         
         
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addEvent))
         
-        // Add month view
-        view.addSubview(monthView)
-        monthView.anchor(top: view.topAnchor,
-                         paddingTop: 30,
-                         leading: view.leadingAnchor,
-                         trailing: view.trailingAnchor,
-                         height: view.frame.width / 7 * 6 + 50) // 50 - height of header
-        monthView.minimumLineSpacing = 0
-        monthView.minimumInteritemSpacing = 0
-        //monthView.isUserInteractionEnabled = true
+        
+        setupView()
+                
     }
 
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        /*
+         // safe area расчитывается после того, как окно загрузится и покажется на экране
+         
+        print(view.safeAreaLayoutGuide.layoutFrame.width)
+        print(view.safeAreaLayoutGuide.layoutFrame.height)
+        print(view.safeAreaInsets.left)
+        print(view.safeAreaInsets.bottom)
+        print(view.safeAreaInsets.top)
+        print("top margin \(view.layoutMargins.top)")
+        print("left margin \(view.layoutMargins.left)")
+        print("margin width \(view.layoutMarginsGuide.layoutFrame.width)")
+        print("view width \(view.frame.width)")
+        print("margin height \(view.layoutMarginsGuide.layoutFrame.height)")
+        print("view height \(view.frame.height)")
+        */
+    }
+    
+    
+    // MARK: - Methods
+    private func setupView() {
 
+        // Add top image
+        view.addSubview(topImage)
+        topImage.anchor(top: view.topAnchor,
+                        leading: view.leadingAnchor,
+                        trailing: view.trailingAnchor,
+                        height: 150)
+        
+        // Add month label
+        topImage.addSubview(monthLabel)
+        monthLabel.anchor(top: topImage.topAnchor, paddingTop: 50,
+                          centerX: topImage.centerXAnchor)
+        
+        // Add new event button
+        view.addSubview(newEventButton)
+        newEventButton.anchor(top: view.topAnchor, paddingTop: 50,
+                              trailing: view.trailingAnchor, paddingTrailing: 20,
+                              width: 25,
+                              height: 25)
+        
+        // Add calendar
+        view.addSubview(calendarView)
+        //was -> view.topAnchor, paddingTop: 0,
+        //margins.topAnchor
+        
+        calendarView.anchor(top: topImage.bottomAnchor, // view.layoutMarginsGuide.topAnchor,
+                         leading: view.leadingAnchor, paddingLeading: 20,
+                         trailing: view.trailingAnchor, paddingTrailing: 20,
+                         height: (view.layoutMarginsGuide.layoutFrame.width - 40) / 7 * 6 + 50)
+        // 40 - left padding + right padding
+        // 7 - count of days in a line
+        // 6 - count of days in a column
+        // 50 - height of header
+        
+        calendarView.minimumLineSpacing = 0
+        calendarView.minimumInteritemSpacing = 0
+        //calendarView.isUserInteractionEnabled = true
+        
+        
+        // Add table with events
+        view.addSubview(eventsTable)
+        eventsTable.anchor(top: calendarView.bottomAnchor, paddingTop: 0,
+                           bottom: view.layoutMarginsGuide.bottomAnchor, paddingBottom: 0,
+                           leading: view.leadingAnchor, paddingLeading: 20,
+                           trailing: view.trailingAnchor, paddingTrailing: 20)
+        
+    }
+
+    @objc func addEvent() {
+        print("add new event")
+        present(NewEventController(), animated: true, completion: nil)
+    }
+    
 }
 
 
@@ -177,10 +274,10 @@ extension MainViewController: JTACMonthViewDelegate {
     
     func calendar(_ calendar: JTACMonthView, headerViewForDateRange range: (start: Date, end: Date), at indexPath: IndexPath) -> JTACMonthReusableView {
 
-        print("header")
+//        print("header")
         let header = calendar.dequeueReusableJTAppleSupplementaryView(withReuseIdentifier: headerIdentifier, for: indexPath) as! DateHeader
         header.monthTitle.text = formatter.string(from: range.start)
-        print("return header -> \(header.monthTitle.text)")
+//        print("return header -> \(header.monthTitle.text)")
         return header
     }
     

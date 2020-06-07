@@ -23,23 +23,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let tabBarController = UITabBarController()
         
-        let tab1 = MainViewController()
+        let mainTab = MainViewController()
+//        let mainTab = UINavigationController(rootViewController: MainViewController())
         let tabBarItem1 = UITabBarItem(title: "Home", image: nil, tag: 0)
-        tab1.tabBarItem = tabBarItem1
+        mainTab.tabBarItem = tabBarItem1
         
+        /*
         let tab2 = NewEventController()
         let tabBarItem2 = UITabBarItem(title: "New event", image: nil, tag: 1)
         tab2.tabBarItem = tabBarItem2
+        */
         
-        let tab3 = CategoriesController()
+        let categoriesTab = CategoriesController()
         let tabBarItem3 = UITabBarItem(title: "Categories", image: nil, tag: 2)
-        tab3.tabBarItem = tabBarItem3
+        categoriesTab.tabBarItem = tabBarItem3
         
-        let tab4 = SettingsController()
+        let settingsTab = SettingsController()
         let tabBarItem4 = UITabBarItem(title: "Settings", image: nil, tag: 3)
-        tab4.tabBarItem = tabBarItem4
+        settingsTab.tabBarItem = tabBarItem4
         
-        tabBarController.viewControllers = [tab1, tab2, tab3, tab4]
+        tabBarController.viewControllers = [mainTab, categoriesTab, settingsTab]
         tabBarController.selectedIndex = 0
         
                 
