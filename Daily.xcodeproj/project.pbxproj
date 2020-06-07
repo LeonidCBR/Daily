@@ -15,6 +15,9 @@
 		D77F5DE12425EB6D009A0460 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D77F5DE02425EB6D009A0460 /* Assets.xcassets */; };
 		D77F5DE42425EB6D009A0460 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D77F5DE22425EB6D009A0460 /* LaunchScreen.storyboard */; };
 		D7E928182425F98100EA8362 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E928172425F98100EA8362 /* Extensions.swift */; };
+		D7F68596248CB65900E963AA /* NewEventController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F68595248CB65900E963AA /* NewEventController.swift */; };
+		D7F68598248CBF5C00E963AA /* CategoriesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F68597248CBF5C00E963AA /* CategoriesController.swift */; };
+		D7F6859A248CBF8F00E963AA /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F68599248CBF8F00E963AA /* SettingsController.swift */; };
 		F51C0BC8585AB7D3D3BC344C /* Pods_Daily.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15101A92A76515D996FD520B /* Pods_Daily.framework */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +34,9 @@
 		D77F5DE32425EB6D009A0460 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D77F5DE52425EB6D009A0460 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D7E928172425F98100EA8362 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		D7F68595248CB65900E963AA /* NewEventController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEventController.swift; sourceTree = "<group>"; };
+		D7F68597248CBF5C00E963AA /* CategoriesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesController.swift; sourceTree = "<group>"; };
+		D7F68599248CBF8F00E963AA /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		E219ADD1D7BF065B33E439D1 /* Pods-Daily.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Daily.release.xcconfig"; path = "Target Support Files/Pods-Daily/Pods-Daily.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -92,6 +98,9 @@
 			isa = PBXGroup;
 			children = (
 				D77F5DDB2425EB65009A0460 /* MainViewController.swift */,
+				D7F68595248CB65900E963AA /* NewEventController.swift */,
+				D7F68597248CBF5C00E963AA /* CategoriesController.swift */,
+				D7F68599248CBF8F00E963AA /* SettingsController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -243,12 +252,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7F6859A248CBF8F00E963AA /* SettingsController.swift in Sources */,
 				D736106E243218A200C88CDC /* DateHeader.swift in Sources */,
 				D77F5DDC2425EB65009A0460 /* MainViewController.swift in Sources */,
 				D77F5DD82425EB65009A0460 /* AppDelegate.swift in Sources */,
 				D77F5DDA2425EB65009A0460 /* SceneDelegate.swift in Sources */,
 				D7E928182425F98100EA8362 /* Extensions.swift in Sources */,
 				D71F85FF2426417B002D0F4D /* DateCell.swift in Sources */,
+				D7F68596248CB65900E963AA /* NewEventController.swift in Sources */,
+				D7F68598248CBF5C00E963AA /* CategoriesController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

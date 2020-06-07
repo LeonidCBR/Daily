@@ -34,6 +34,7 @@ class MainViewController: UIViewController {
         
 //        print("init vc...")
         
+//        title = "Main"
         view.backgroundColor = .white
 //        view.backgroundColor = UIColor(hexRGB: "#341f97")
         
