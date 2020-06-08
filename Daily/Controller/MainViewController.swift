@@ -15,23 +15,84 @@ class MainViewController: UIViewController {
     private let cellIdentifier = "DateCell"
     private let headerIdentifier = "DateHeader"
     
+    // нормальный размер: 50
+    // сейчас 0.1 - это КОСТЫЛИ, так как если не использовать header или ставить его размер в 0,
+    // то headerViewForDateRange delegate не срабатывает
+    private let headerHeight: CGFloat = 0.1
+    
+    private let dateFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.dateStyle = .medium
+        df.timeStyle = .none
+        df.locale = Locale(identifier: "ru_RU")
+        
+        // TODO: - разобраться, как выводить на экран название месяца в именительном падеже
+        
+        df.formattingContext = .standalone
+        return df
+    }()
+    
+    
+    
+    // MARK: - UI Properties
     private let topImage: UIImageView = {
-        let imageView = UIImageView()
+        let imageView = UIImageView(image: .init(imageLiteralResourceName: "sky-640"))
         imageView.backgroundColor = .white
         return imageView
     }()
     
     private let monthLabel: UILabel = {
         let label = UILabel()
-        label.text = "MONTH"
+//        label.text = "MONTH"
+        label.font = UIFont(name: "HelveticaNeue-Bold", size: 20.0)
+        label.textAlignment = .center
+        label.textColor = .white
+        label.backgroundColor = .systemTeal
+        label.clipsToBounds = true
+//        label.layer.borderWidth = 3.0
+//        label.layer.borderColor = UIColor.red.cgColor
+        label.layer.cornerRadius = 20.0
         return label
     }()
     
+    private let yearLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "HelveticaNeue-Bold", size: 15.0)
+        label.textAlignment = .center
+        label.textColor = .white
+//        label.backgroundColor = .systemTeal
+//        label.clipsToBounds = true
+        //        label.layer.borderWidth = 3.0
+        //        label.layer.borderColor = UIColor.red.cgColor
+//        label.layer.cornerRadius = 20.0
+        return label
+    }()
+    
+    /*
+    let size:CGFloat = 35.0 // 35.0 chosen arbitrarily
+    countLabel.bounds = CGRectMake(0.0, 0.0, size, size)
+    countLabel.layer.cornerRadius = size / 2
+    countLabel.layer.borderWidth = 3.0
+    countLabel.layer.backgroundColor = UIColor.clearColor().CGColor
+    countLabel.layer.borderColor = UIColor.greenColor().CGColor
+    */
+    
     private let newEventButton: UIButton = {
         let button = UIButton()
-        button.setImage(.add, for: .normal)
-//        button.tintColor = .red
+        /*
+        let img = UIImageView(image: UIImage.init(systemName: "plus.circle")?.withRenderingMode(.alwaysOriginal))
+        img.contentMode = .scaleAspectFill
+        img.tintColor = .red
+        button.imageView = img
+        */
+//        button.setImage(UIImage.init(systemName: "plus.circle"), for: .normal)
 //        button.backgroundColor = .systemPink
+        button.setBackgroundImage(UIImage.init(systemName: "plus.circle"), for: .normal)
+        button.tintColor = .white
+        button.backgroundColor = .systemTeal
+        button.layer.cornerRadius = 20.0
+        button.layer.borderWidth = 3.0
+        button.layer.borderColor = UIColor.white.cgColor
         button.addTarget(self, action: #selector(addEvent), for: .touchUpInside)
         return button
     }()
@@ -48,10 +109,11 @@ class MainViewController: UIViewController {
     private let eventsTable: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .systemTeal
+        tableView.separatorStyle = .none
         return tableView
     }()
     
-    let formatter = DateFormatter()
+    
     
     
     // MARK: - Lifecycle
@@ -65,10 +127,25 @@ class MainViewController: UIViewController {
         view.backgroundColor = .systemTeal
 //        view.backgroundColor = UIColor(hexRGB: "#341f97")
         
-        formatter.dateFormat = "MMM"
+        /*
+        // testing
+        
+        let dF = DateFormatter()
+        dF.dateStyle = .medium
+        dF.timeStyle = .none
+         
+        let d = Date(timeIntervalSinceReferenceDate: 118800)
+         
+        // US English Locale (en_US)
+        dF.locale = Locale(identifier: "ru_RU")
+        print(dF.string(from: d)) // Jan 2, 2001
+        */
+
         
         // Register cell
         calendarView.register(DateCell.self, forCellWithReuseIdentifier: cellIdentifier)
+        
+        // Register header
         calendarView.register(DateHeader.self, forSupplementaryViewOfKind: JTACMonthView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier)
         
         // Set up delegate
@@ -85,7 +162,10 @@ class MainViewController: UIViewController {
         
         
         setupView()
-                
+
+        
+        calendarView.scrollToDate(Date(), animateScroll: false)
+        calendarView.selectDates( [ Date() ] )
     }
 
     
@@ -107,6 +187,10 @@ class MainViewController: UIViewController {
         print("margin height \(view.layoutMarginsGuide.layoutFrame.height)")
         print("view height \(view.frame.height)")
         */
+//        print("Month label width = \(monthLabel.frame.width) and height = \(monthLabel.frame.height)")
+        
+//        newEventButton.sendActions(for: .touchUpInside)
+        
     }
     
     
@@ -123,14 +207,21 @@ class MainViewController: UIViewController {
         // Add month label
         topImage.addSubview(monthLabel)
         monthLabel.anchor(top: topImage.topAnchor, paddingTop: 50,
+                          width: 100,
+                          height: 35,
                           centerX: topImage.centerXAnchor)
+        
+        // Add year label
+        topImage.addSubview(yearLabel)
+        yearLabel.anchor(top: monthLabel.bottomAnchor, paddingTop: 10,
+                        centerX: topImage.centerXAnchor)
         
         // Add new event button
         view.addSubview(newEventButton)
         newEventButton.anchor(top: view.topAnchor, paddingTop: 50,
                               trailing: view.trailingAnchor, paddingTrailing: 20,
-                              width: 25,
-                              height: 25)
+                              width: 40,
+                              height: 40)
         
         // Add calendar
         view.addSubview(calendarView)
@@ -140,11 +231,12 @@ class MainViewController: UIViewController {
         calendarView.anchor(top: topImage.bottomAnchor, // view.layoutMarginsGuide.topAnchor,
                          leading: view.leadingAnchor, paddingLeading: 20,
                          trailing: view.trailingAnchor, paddingTrailing: 20,
-                         height: (view.layoutMarginsGuide.layoutFrame.width - 40) / 7 * 6 + 50)
+                         height: (view.layoutMarginsGuide.layoutFrame.width - 40) / 7 * 6 + headerHeight)
         // 40 - left padding + right padding
         // 7 - count of days in a line
         // 6 - count of days in a column
         // 50 - height of header
+        
         
         calendarView.minimumLineSpacing = 0
         calendarView.minimumInteritemSpacing = 0
@@ -160,9 +252,17 @@ class MainViewController: UIViewController {
         
     }
 
+    
     @objc func addEvent() {
         print("add new event")
         present(NewEventController(), animated: true, completion: nil)
+    }
+    
+    
+    private func selectDate(_ date: Date) {
+        
+        dateFormatter.dateFormat = "dd-MM-yyyy"
+        print("Selected date is \(dateFormatter.string(from: date))")
     }
     
 }
@@ -171,13 +271,16 @@ class MainViewController: UIViewController {
 // MARK: - JTACMonthViewDataSource
 extension MainViewController: JTACMonthViewDataSource {
     func configureCalendar(_ calendar: JTACMonthView) -> ConfigurationParameters {
+
+        var dateDelta = DateComponents()
         
-//        print("configure calendar")
+        // Subtrack years
+        dateDelta.year = -5
+        let startDate = Calendar.current.date(byAdding: dateDelta, to: Date()) ?? Date()
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy MM dd"
-        let startDate = formatter.date(from: "2020 01 01")!
-        let endDate = Date()
+        // Add years
+        dateDelta.year = 5
+        let endDate = Calendar.current.date(byAdding: dateDelta, to: Date()) ?? Date()
         
         /*
         //calendar: calendar,
@@ -224,7 +327,7 @@ extension MainViewController: JTACMonthViewDelegate {
 //            cell.isSelected = false
         }
         
-        
+//        cell.dateLabel.textColor = .white
         
         //cell.isSelected = true
         
@@ -245,6 +348,8 @@ extension MainViewController: JTACMonthViewDelegate {
     
     func calendar(_ calendar: JTACMonthView, willDisplay cell: JTACDayCell, forItemAt date: Date, cellState:
         CellState, indexPath: IndexPath) {
+    
+        // ????????
         
         print("will display...")
         
@@ -254,10 +359,14 @@ extension MainViewController: JTACMonthViewDelegate {
     
     
     func calendar(_ calendar: JTACMonthView, didSelectDate date: Date, cell: JTACDayCell?, cellState: CellState, indexPath: IndexPath) {
-        let cell = cell as! DateCell
-        print("trying to select day: \(cell.dateLabel.text!)")
+//        let cell = cell as! DateCell
+//        print("trying to select day: \(cell.dateLabel.text!)")
         
-        cell.dateLabel.textColor = .white
+//        dateFormatter.dateFormat = "dd-MM-yyyy"
+//        print("Selected date is \(dateFormatter.string(from: date))")
+        selectDate(date)
+        
+//        cell.dateLabel.textColor = .red //.systemTeal
         
         /*
         if cell.dateLabel.text == "" {
@@ -271,18 +380,25 @@ extension MainViewController: JTACMonthViewDelegate {
         */
     }
 
-    
     func calendar(_ calendar: JTACMonthView, headerViewForDateRange range: (start: Date, end: Date), at indexPath: IndexPath) -> JTACMonthReusableView {
 
-//        print("header")
+//        print("!month!")
+        
+        dateFormatter.dateFormat = "MMMM"
+        monthLabel.text = dateFormatter.string(from: range.start)
+        
+        dateFormatter.dateFormat = "yyyy"
+        yearLabel.text = dateFormatter.string(from: range.start)
+        
         let header = calendar.dequeueReusableJTAppleSupplementaryView(withReuseIdentifier: headerIdentifier, for: indexPath) as! DateHeader
-        header.monthTitle.text = formatter.string(from: range.start)
-//        print("return header -> \(header.monthTitle.text)")
+        // КОСТЫЛИ!!!
+//        header.monthTitle.text = dateFormatter.string(from: range.start)
         return header
     }
-    
+
     func calendarSizeForMonths(_ calendar: JTACMonthView?) -> MonthSize? {
-        return MonthSize(defaultSize: 50)
+        // set height for header with month
+        return MonthSize(defaultSize: headerHeight)
     }
     
 }

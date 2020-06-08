@@ -27,12 +27,13 @@ class DateCell: JTACDayCell { //JTACMonthCell
         
         backgroundColor = .systemTeal
         selectedBackgroundView = UIView(frame: frame)
-        if let selectedBackgroundView = selectedBackgroundView {
-            selectedBackgroundView.layer.cornerRadius = selectedBackgroundView.frame.height / 2
-            selectedBackgroundView.backgroundColor = .white
-            //print("width = \(selectedBackgroundView.frame.width)")
-            //print("height = \(selectedBackgroundView.frame.height)")
-        }
+        selectedBackgroundView?.layer.cornerRadius = frame.height / 2
+//        selectedBackgroundView.backgroundColor = .white
+        selectedBackgroundView?.layer.borderWidth = 5.0
+        selectedBackgroundView?.layer.borderColor = UIColor.white.cgColor
+        //print("width = \(selectedBackgroundView.frame.width)")
+        //print("height = \(selectedBackgroundView.frame.height)")
+        
 //        isSelected = true
         
         addSubview(dateLabel)
