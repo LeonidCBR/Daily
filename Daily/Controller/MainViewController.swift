@@ -12,12 +12,15 @@ import JTAppleCalendar
 class MainViewController: UIViewController {
 
     // MARK: - Properties
-    private let cellIdentifier = "DateCell"
+    private let calendarCellIdentifier = "DateCell"
     private let headerIdentifier = "DateHeader"
+    private let eventsCellIdentifier = "EventCell"
     
     // headerHeight = 0.1 - это КОСТЫЛИ, так как если не использовать header или ставить его размер в 0,
     // то headerViewForDateRange delegate не срабатывает и не получится получить измененные месяц и год
     private let headerHeight: CGFloat = 150.0
+    
+    private var events = [Event]()
     
     private let dateFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -69,15 +72,7 @@ class MainViewController: UIViewController {
     }()
     */
     
-    /*
-    let size:CGFloat = 35.0 // 35.0 chosen arbitrarily
-    countLabel.bounds = CGRectMake(0.0, 0.0, size, size)
-    countLabel.layer.cornerRadius = size / 2
-    countLabel.layer.borderWidth = 3.0
-    countLabel.layer.backgroundColor = UIColor.clearColor().CGColor
-    countLabel.layer.borderColor = UIColor.greenColor().CGColor
-    */
-    
+   
     private let newEventButton: UIButton = {
         let button = UIButton()
         /*
@@ -117,6 +112,7 @@ class MainViewController: UIViewController {
         let tableView = UITableView()
         tableView.backgroundColor = .systemTeal
         tableView.separatorStyle = .none
+//        tableView.allowsSelection = false
         return tableView
     }()
     
@@ -128,7 +124,9 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        print("init vc...")
+        events.append(Event(text: "test event 1", datetime: Date()))
+        events.append(Event(text: "посмотреть фильм", datetime: Date()))
+        events.append(Event(text: "сделать что-нибудь хорошее", datetime: Date()))
         
 //        title = "Main"
         view.backgroundColor = .systemTeal
@@ -149,16 +147,14 @@ class MainViewController: UIViewController {
         */
 
         
-        // Register cell
-        calendarView.register(DateCell.self, forCellWithReuseIdentifier: cellIdentifier)
         
-        // Register header
-        calendarView.register(DateHeader.self, forSupplementaryViewOfKind: JTACMonthView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier)
+        // Register cells for events
+        eventsTable.register(EventCell.self, forCellReuseIdentifier: eventsCellIdentifier)
         
         // Set up delegate
-        calendarView.calendarDelegate = self
-        calendarView.calendarDataSource = self
-        //calendarView.ibCalendarDelegate
+        eventsTable.dataSource = self
+        eventsTable.delegate = self
+        
         
         
         // !!!
@@ -167,17 +163,16 @@ class MainViewController: UIViewController {
         
 //        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addEvent))
         
+        configureCalendar()
         
         setupView()
-
         
-        calendarView.scrollToDate(Date(), animateScroll: false)
-        calendarView.selectDates( [ Date() ] )
     }
 
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
         
         /*
          // safe area расчитывается после того, как окно загрузится и покажется на экране
@@ -193,6 +188,10 @@ class MainViewController: UIViewController {
         print("view width \(view.frame.width)")
         print("margin height \(view.layoutMarginsGuide.layoutFrame.height)")
         print("view height \(view.frame.height)")
+         
+        print("fr - \(newEventButton.frame.width)")
+        print("b - \(newEventButton.bounds.width)")
+        newEventButton.bounds.size.width += 40
         */
 //        print("Month label width = \(monthLabel.frame.width) and height = \(monthLabel.frame.height)")
         
@@ -202,6 +201,24 @@ class MainViewController: UIViewController {
     
     
     // MARK: - Methods
+    private func configureCalendar() {
+        
+        // Register cells for calendar
+        calendarView.register(DateCell.self, forCellWithReuseIdentifier: calendarCellIdentifier)
+        
+        // Register header
+        calendarView.register(DateHeader.self, forSupplementaryViewOfKind: JTACMonthView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier)
+        
+        // Set up delegate
+        calendarView.calendarDelegate = self
+        calendarView.calendarDataSource = self
+        //calendarView.ibCalendarDelegate
+        
+        calendarView.scrollToDate(Date(), animateScroll: false)
+        calendarView.selectDates( [ Date() ] )
+    }
+    
+    
     private func setupView() {
 
         // Add top image
@@ -312,7 +329,6 @@ extension MainViewController: JTACMonthViewDataSource {
 
 
 // MARK: - JTACMonthViewDelegate
-
 extension MainViewController: JTACMonthViewDelegate {
     
     func calendar(_ calendar: JTACMonthView, cellForItemAt date: Date, cellState: CellState, indexPath: IndexPath) -> JTACDayCell {
@@ -323,7 +339,7 @@ extension MainViewController: JTACMonthViewDelegate {
         //thisMonth
         //followingMonthOutsideBoundary
         
-        let cell = calendar.dequeueReusableJTAppleCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! DateCell
+        let cell = calendar.dequeueReusableJTAppleCell(withReuseIdentifier: calendarCellIdentifier, for: indexPath) as! DateCell
         
         if cellState.dateBelongsTo == .thisMonth {
 //            cell.dateLabel.textColor = .white
@@ -410,5 +426,24 @@ extension MainViewController: JTACMonthViewDelegate {
         return MonthSize(defaultSize: headerHeight)
     }
     
+}
+
+// MARK: - UITableViewDelegate, UITableViewDataSource
+extension MainViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        events.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: eventsCellIdentifier, for: indexPath) as! EventCell
+        cell.eventText.text = events[indexPath.row].text
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        print("row[\(indexPath.row)] is selected")
+    }
+
 }
 
