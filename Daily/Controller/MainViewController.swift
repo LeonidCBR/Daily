@@ -15,10 +15,9 @@ class MainViewController: UIViewController {
     private let cellIdentifier = "DateCell"
     private let headerIdentifier = "DateHeader"
     
-    // нормальный размер: 50
-    // сейчас 0.1 - это КОСТЫЛИ, так как если не использовать header или ставить его размер в 0,
-    // то headerViewForDateRange delegate не срабатывает
-    private let headerHeight: CGFloat = 0.1
+    // headerHeight = 0.1 - это КОСТЫЛИ, так как если не использовать header или ставить его размер в 0,
+    // то headerViewForDateRange delegate не срабатывает и не получится получить измененные месяц и год
+    private let headerHeight: CGFloat = 150.0
     
     private let dateFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -41,6 +40,7 @@ class MainViewController: UIViewController {
         return imageView
     }()
     
+    /*
     private let monthLabel: UILabel = {
         let label = UILabel()
 //        label.text = "MONTH"
@@ -67,6 +67,7 @@ class MainViewController: UIViewController {
 //        label.layer.cornerRadius = 20.0
         return label
     }()
+    */
     
     /*
     let size:CGFloat = 35.0 // 35.0 chosen arbitrarily
@@ -89,17 +90,23 @@ class MainViewController: UIViewController {
 //        button.backgroundColor = .systemPink
         button.setBackgroundImage(UIImage.init(systemName: "plus.circle"), for: .normal)
         button.tintColor = .white
+        
+        // v1
+//        button.backgroundColor = .clear
+//        button.layer.borderColor = UIColor.clear.cgColor
+        // v2
         button.backgroundColor = .systemTeal
-        button.layer.cornerRadius = 20.0
-        button.layer.borderWidth = 3.0
         button.layer.borderColor = UIColor.white.cgColor
+        
+        button.layer.borderWidth = 3.0
+        button.layer.cornerRadius = 20.0
         button.addTarget(self, action: #selector(addEvent), for: .touchUpInside)
         return button
     }()
     
     private let calendarView: JTACMonthView = {
         let calendar = JTACMonthView()
-        calendar.backgroundColor = .white
+        calendar.backgroundColor = .clear
         calendar.scrollDirection = .horizontal
         calendar.scrollingMode = .stopAtEachCalendarFrame
         calendar.showsHorizontalScrollIndicator = false
@@ -203,7 +210,7 @@ class MainViewController: UIViewController {
                         leading: view.leadingAnchor,
                         trailing: view.trailingAnchor,
                         height: 150)
-        
+        /*
         // Add month label
         topImage.addSubview(monthLabel)
         monthLabel.anchor(top: topImage.topAnchor, paddingTop: 50,
@@ -215,20 +222,14 @@ class MainViewController: UIViewController {
         topImage.addSubview(yearLabel)
         yearLabel.anchor(top: monthLabel.bottomAnchor, paddingTop: 10,
                         centerX: topImage.centerXAnchor)
-        
-        // Add new event button
-        view.addSubview(newEventButton)
-        newEventButton.anchor(top: view.topAnchor, paddingTop: 50,
-                              trailing: view.trailingAnchor, paddingTrailing: 20,
-                              width: 40,
-                              height: 40)
+        */
         
         // Add calendar
         view.addSubview(calendarView)
         //was -> view.topAnchor, paddingTop: 0,
         //margins.topAnchor
         
-        calendarView.anchor(top: topImage.bottomAnchor, // view.layoutMarginsGuide.topAnchor,
+        calendarView.anchor(top: view.topAnchor, // view.layoutMarginsGuide.topAnchor, // topImage.bottomAnchor,
                          leading: view.leadingAnchor, paddingLeading: 20,
                          trailing: view.trailingAnchor, paddingTrailing: 20,
                          height: (view.layoutMarginsGuide.layoutFrame.width - 40) / 7 * 6 + headerHeight)
@@ -240,8 +241,15 @@ class MainViewController: UIViewController {
         
         calendarView.minimumLineSpacing = 0
         calendarView.minimumInteritemSpacing = 0
+        // calendarView.coordinateSpace // ???
         //calendarView.isUserInteractionEnabled = true
         
+        // Add new event button
+        view.addSubview(newEventButton)
+        newEventButton.anchor(top: view.topAnchor, paddingTop: 55,
+                              trailing: view.trailingAnchor, paddingTrailing: 20,
+                              width: 40,
+                              height: 40)
         
         // Add table with events
         view.addSubview(eventsTable)
@@ -382,17 +390,18 @@ extension MainViewController: JTACMonthViewDelegate {
 
     func calendar(_ calendar: JTACMonthView, headerViewForDateRange range: (start: Date, end: Date), at indexPath: IndexPath) -> JTACMonthReusableView {
 
-//        print("!month!")
-        
-        dateFormatter.dateFormat = "MMMM"
-        monthLabel.text = dateFormatter.string(from: range.start)
-        
-        dateFormatter.dateFormat = "yyyy"
-        yearLabel.text = dateFormatter.string(from: range.start)
+        // When month is changed
         
         let header = calendar.dequeueReusableJTAppleSupplementaryView(withReuseIdentifier: headerIdentifier, for: indexPath) as! DateHeader
-        // КОСТЫЛИ!!!
-//        header.monthTitle.text = dateFormatter.string(from: range.start)
+        
+        dateFormatter.dateFormat = "MMMM"
+        header.monthTitle.text = dateFormatter.string(from: range.start)
+//        monthLabel.text = dateFormatter.string(from: range.start)
+        
+        dateFormatter.dateFormat = "yyyy"
+        header.yearTitle.text = dateFormatter.string(from: range.start)
+//        yearLabel.text = dateFormatter.string(from: range.start)
+        
         return header
     }
 
