@@ -20,7 +20,6 @@ class NewEventController: UIViewController {
     private let cancelButton: UIButton = {
         let button = UIButton()
         button.setTitle("Cancel", for: .normal)
-//        button.tintColor = .gray
         button.setTitleColor(.gray, for: .normal)
         button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         return button

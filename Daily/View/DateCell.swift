@@ -14,7 +14,10 @@ class DateCell: JTACDayCell { //JTACMonthCell
     // MARK: - Properties
     let dateLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .white
+        
+        // we will change the textColor later in the method => func calendar(_ calendar: JTACMonthView, cellForItemAt date: Date, cellState: CellState, indexPath: IndexPath) -> JTACDayCell
+        // label.textColor = .white
+        
         return label
     }()
     
@@ -23,16 +26,12 @@ class DateCell: JTACDayCell { //JTACMonthCell
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        //print("init cell...")        
-        
         backgroundColor = .systemTeal
         selectedBackgroundView = UIView(frame: frame)
         selectedBackgroundView?.layer.cornerRadius = frame.height / 2
 //        selectedBackgroundView.backgroundColor = .white
         selectedBackgroundView?.layer.borderWidth = 5.0
         selectedBackgroundView?.layer.borderColor = UIColor.white.cgColor
-        //print("width = \(selectedBackgroundView.frame.width)")
-        //print("height = \(selectedBackgroundView.frame.height)")
         
 //        isSelected = true
         

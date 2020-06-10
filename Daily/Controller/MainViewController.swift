@@ -11,13 +11,15 @@ import JTAppleCalendar
 
 class MainViewController: UIViewController {
 
+    
+    // TODO: - DO NOT allow select a blank day
+    
+    
     // MARK: - Properties
     private let calendarCellIdentifier = "DateCell"
     private let headerIdentifier = "DateHeader"
     private let eventsCellIdentifier = "EventCell"
     
-    // headerHeight = 0.1 - это КОСТЫЛИ, так как если не использовать header или ставить его размер в 0,
-    // то headerViewForDateRange delegate не срабатывает и не получится получить измененные месяц и год
     private let headerHeight: CGFloat = 150.0
     
     private var events = [Event]()
@@ -124,9 +126,10 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        events.append(Event(text: "test event 1", datetime: Date()))
-        events.append(Event(text: "посмотреть фильм", datetime: Date()))
-        events.append(Event(text: "сделать что-нибудь хорошее", datetime: Date()))
+        let testCategory = ECategory(name: "test cat", color: UIColor.blue)        
+        events.append(Event(text: "test event 1", datetime: Date(), category: testCategory))
+        events.append(Event(text: "посмотреть фильм", datetime: Date(), category: testCategory))
+        events.append(Event(text: "сделать что-нибудь хорошее", datetime: Date(), category: testCategory))
         
 //        title = "Main"
         view.backgroundColor = .systemTeal
@@ -173,10 +176,21 @@ class MainViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        // Creating a constraint using NSLayoutConstraint
+//        NSLayoutConstraint(item: calendarView,
+//                           attribute: .height,
+//                           relatedBy: .equal,
+//                           toItem: nil,
+//                           attribute: .width,
+//                           multiplier: CGFloat(6) / CGFloat(7),
+//            constant: CGFloat(headerHeight)).isActive = true
+         
+        // Creating the same constraint using constraintEqualToConstant:
+        //button.widthAnchor.constraintEqualToConstant(40.0).active = true
+        
         
         /*
-         // safe area расчитывается после того, как окно загрузится и покажется на экране
-         
+        // safe area расчитывается после того, как окно загрузится и покажется на экране
         print(view.safeAreaLayoutGuide.layoutFrame.width)
         print(view.safeAreaLayoutGuide.layoutFrame.height)
         print(view.safeAreaInsets.left)
@@ -191,12 +205,9 @@ class MainViewController: UIViewController {
          
         print("fr - \(newEventButton.frame.width)")
         print("b - \(newEventButton.bounds.width)")
-        newEventButton.bounds.size.width += 40
         */
-//        print("Month label width = \(monthLabel.frame.width) and height = \(monthLabel.frame.height)")
-        
-//        newEventButton.sendActions(for: .touchUpInside)
-        
+        //newEventButton.bounds.size.width += 40
+        //print("Month label width = \(monthLabel.frame.width) and height = \(monthLabel.frame.height)")
     }
     
     
@@ -243,22 +254,28 @@ class MainViewController: UIViewController {
         
         // Add calendar
         view.addSubview(calendarView)
-        //was -> view.topAnchor, paddingTop: 0,
-        //margins.topAnchor
+        calendarView.anchor(top: view.topAnchor,
+                            leading: view.layoutMarginsGuide.leadingAnchor,
+                            trailing: view.layoutMarginsGuide.trailingAnchor)
+        //                         leading: view.leadingAnchor, paddingLeading: 20,
+        //                         trailing: view.trailingAnchor, paddingTrailing: 20,
+        //                         height: (view.layoutMarginsGuide.layoutFrame.width - 40) / 7 * 6 + headerHeight)
         
-        calendarView.anchor(top: view.topAnchor, // view.layoutMarginsGuide.topAnchor, // topImage.bottomAnchor,
-                         leading: view.leadingAnchor, paddingLeading: 20,
-                         trailing: view.trailingAnchor, paddingTrailing: 20,
-                         height: (view.layoutMarginsGuide.layoutFrame.width - 40) / 7 * 6 + headerHeight)
-        // 40 - left padding + right padding
-        // 7 - count of days in a line
-        // 6 - count of days in a column
-        // 50 - height of header
-        
-        
+        // calculate height of calendarView
+        // formula: <width> / <count-of-days-in-line> * <count-of-days-in-column> + <header-height>
+        let countOfDaysInColumn: CGFloat = 6
+        let countOfDaysInLine: CGFloat = 7
+        NSLayoutConstraint(item: calendarView,
+                       attribute: .height,
+                       relatedBy: .equal,
+                       toItem: view.layoutMarginsGuide,
+                       attribute: .width,
+                       multiplier: countOfDaysInColumn / countOfDaysInLine,
+                       constant: CGFloat(headerHeight)).isActive = true
+      
         calendarView.minimumLineSpacing = 0
         calendarView.minimumInteritemSpacing = 0
-        // calendarView.coordinateSpace // ???
+        //calendarView.coordinateSpace // ???
         //calendarView.isUserInteractionEnabled = true
         
         // Add new event button
@@ -270,10 +287,10 @@ class MainViewController: UIViewController {
         
         // Add table with events
         view.addSubview(eventsTable)
-        eventsTable.anchor(top: calendarView.bottomAnchor, paddingTop: 0,
-                           bottom: view.layoutMarginsGuide.bottomAnchor, paddingBottom: 0,
-                           leading: view.leadingAnchor, paddingLeading: 20,
-                           trailing: view.trailingAnchor, paddingTrailing: 20)
+        eventsTable.anchor(top: calendarView.bottomAnchor,
+                           bottom: view.layoutMarginsGuide.bottomAnchor,
+                           leading: view.layoutMarginsGuide.leadingAnchor,
+                           trailing: view.layoutMarginsGuide.trailingAnchor)
         
     }
 
@@ -341,6 +358,30 @@ extension MainViewController: JTACMonthViewDelegate {
         
         let cell = calendar.dequeueReusableJTAppleCell(withReuseIdentifier: calendarCellIdentifier, for: indexPath) as! DateCell
         
+        // let's change the color of the current day
+        dateFormatter.dateFormat = "dd-MM-yyyy"
+        if dateFormatter.string(from: date) == dateFormatter.string(from: Date()) {
+            cell.dateLabel.textColor = .black
+            //cell.backgroundColor = .white
+            /*
+            let curDateBgView = UIView(frame: cell.frame)
+            cell.addSubview(curDateBgView)
+            curDateBgView.anchor(top: cell.topAnchor,
+                                 bottom: cell.bottomAnchor,
+                                 leading: cell.leadingAnchor,
+                                 trailing: cell.trailingAnchor)
+            print("frame height \(cell.frame.height)")
+            curDateBgView.layer.cornerRadius = cell.frame.height / 2
+            curDateBgView.backgroundColor = .green
+            curDateBgView.layer.borderWidth = 5.0
+            curDateBgView.layer.borderColor = UIColor.yellow.cgColor
+            */
+            
+        } else {
+            // because we use reusable cells we have to do this
+            cell.dateLabel.textColor = .white
+        }
+        
         if cellState.dateBelongsTo == .thisMonth {
 //            cell.dateLabel.textColor = .white
             cell.dateLabel.text = cellState.text
@@ -382,27 +423,27 @@ extension MainViewController: JTACMonthViewDelegate {
     }
     
     
-    func calendar(_ calendar: JTACMonthView, didSelectDate date: Date, cell: JTACDayCell?, cellState: CellState, indexPath: IndexPath) {
-//        let cell = cell as! DateCell
-//        print("trying to select day: \(cell.dateLabel.text!)")
+    func calendar(_ calendar: JTACMonthView, shouldSelectDate date: Date, cell: JTACDayCell?, cellState: CellState, indexPath: IndexPath) -> Bool {
         
-//        dateFormatter.dateFormat = "dd-MM-yyyy"
-//        print("Selected date is \(dateFormatter.string(from: date))")
+        if cellState.dateBelongsTo == .thisMonth {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    
+    func calendar(_ calendar: JTACMonthView, didSelectDate date: Date, cell: JTACDayCell?, cellState: CellState, indexPath: IndexPath) {
+
         selectDate(date)
         
-//        cell.dateLabel.textColor = .red //.systemTeal
-        
-        /*
-        if cell.dateLabel.text == "" {
-            
-            // it doesn`t work
-            cell.isSelected = false
-        }
-//        cellState.isSelected = false
-        print(cellState.isSelected)
-        //cell.view
-        */
     }
+    
+    /*
+    func calendar(_ calendar: JTACMonthView, didDeselectDate date: Date, cell: JTACDayCell?, cellState: CellState, indexPath: IndexPath) {
+        print("deselect \(cellState.text)")
+    }
+    */
 
     func calendar(_ calendar: JTACMonthView, headerViewForDateRange range: (start: Date, end: Date), at indexPath: IndexPath) -> JTACMonthReusableView {
 
@@ -426,6 +467,7 @@ extension MainViewController: JTACMonthViewDelegate {
         return MonthSize(defaultSize: headerHeight)
     }
     
+    
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
@@ -437,6 +479,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: eventsCellIdentifier, for: indexPath) as! EventCell
         cell.eventText.text = events[indexPath.row].text
+        cell.colorCircle.backgroundColor = events[indexPath.row].category.color
         return cell
     }
 

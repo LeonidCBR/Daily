@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D70620392490842A000F362F /* ECategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70620382490842A000F362F /* ECategory.swift */; };
 		D71F85FF2426417B002D0F4D /* DateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71F85FE2426417B002D0F4D /* DateCell.swift */; };
 		D736106E243218A200C88CDC /* DateHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D736106D243218A200C88CDC /* DateHeader.swift */; };
 		D77F5DD82425EB65009A0460 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77F5DD72425EB65009A0460 /* AppDelegate.swift */; };
@@ -26,6 +27,7 @@
 /* Begin PBXFileReference section */
 		15101A92A76515D996FD520B /* Pods_Daily.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Daily.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		515D37E6486BABD9EB1C69D3 /* Pods-Daily.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Daily.debug.xcconfig"; path = "Target Support Files/Pods-Daily/Pods-Daily.debug.xcconfig"; sourceTree = "<group>"; };
+		D70620382490842A000F362F /* ECategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECategory.swift; sourceTree = "<group>"; };
 		D71F85FE2426417B002D0F4D /* DateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCell.swift; sourceTree = "<group>"; };
 		D736106D243218A200C88CDC /* DateHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHeader.swift; sourceTree = "<group>"; };
 		D77F5DD42425EB65009A0460 /* Daily.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Daily.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -113,6 +115,7 @@
 			isa = PBXGroup;
 			children = (
 				D7DB23EF248F5EB500D3C47E /* Event.swift */,
+				D70620382490842A000F362F /* ECategory.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -263,6 +266,7 @@
 				D77F5DDC2425EB65009A0460 /* MainViewController.swift in Sources */,
 				D77F5DD82425EB65009A0460 /* AppDelegate.swift in Sources */,
 				D7DB23F0248F5EB500D3C47E /* Event.swift in Sources */,
+				D70620392490842A000F362F /* ECategory.swift in Sources */,
 				D77F5DDA2425EB65009A0460 /* SceneDelegate.swift in Sources */,
 				D7DB23F2248F7B2100D3C47E /* EventCell.swift in Sources */,
 				D7E928182425F98100EA8362 /* Extensions.swift in Sources */,

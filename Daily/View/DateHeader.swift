@@ -34,11 +34,11 @@ class DateHeader: JTACMonthReusableView {
     }()
 
     
-    // MARK: Init
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .clear //.lightGray
+        backgroundColor = .clear
         
         addSubview(monthTitle)
 //        monthTitle.anchor(centerX: centerXAnchor, centerY: centerYAnchor)

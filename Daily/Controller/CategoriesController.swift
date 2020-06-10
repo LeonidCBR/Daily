@@ -23,6 +23,13 @@ class CategoriesController: UIViewController {
         return label
     }()
     
+    private let categoriesTable: UITableView = {
+        let tableView = UITableView()
+        tableView.backgroundColor = .systemTeal
+        tableView.separatorStyle = .none
+        return tableView
+    }()
+    
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -48,6 +55,15 @@ class CategoriesController: UIViewController {
         topImage.addSubview(headerLabel)
         headerLabel.anchor(top: topImage.topAnchor, paddingTop: 50,
                           centerX: topImage.centerXAnchor)
+        
+        // Add table with categories
+        view.addSubview(categoriesTable)
+        // safeAreaLayoutGuide
+        // layoutMarginsGuide
+        categoriesTable.anchor(top: topImage.bottomAnchor,
+                               bottom: view.layoutMarginsGuide.bottomAnchor,
+                               leading: view.layoutMarginsGuide.leadingAnchor,
+                               trailing: view.layoutMarginsGuide.trailingAnchor)
     }
     
     /*

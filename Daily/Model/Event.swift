@@ -8,8 +8,11 @@
 
 import Foundation
 
+
 struct Event {
+    
     let text: String
     let datetime: Date
-//    let category: ECategory
+    let category: ECategory
+    
 }
