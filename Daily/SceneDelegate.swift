@@ -25,8 +25,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let mainTab = MainViewController()
 //        let mainTab = UINavigationController(rootViewController: MainViewController())
-        let tabBarItem1 = UITabBarItem(title: "Home", image: nil, tag: 0)
-        mainTab.tabBarItem = tabBarItem1
+        mainTab.tabBarItem = UITabBarItem(title: "Home", image: nil, tag: 0)
         
         /*
         let tab2 = NewEventController()
@@ -35,12 +34,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         */
         
         let categoriesTab = CategoriesController()
-        let tabBarItem3 = UITabBarItem(title: "Categories", image: nil, tag: 2)
-        categoriesTab.tabBarItem = tabBarItem3
+        categoriesTab.tabBarItem = UITabBarItem(title: "Categories", image: nil, tag: 2)
         
         let settingsTab = SettingsController()
-        let tabBarItem4 = UITabBarItem(title: "Settings", image: nil, tag: 3)
-        settingsTab.tabBarItem = tabBarItem4
+        settingsTab.tabBarItem = UITabBarItem(title: "Settings", image: nil, tag: 3)
         
         tabBarController.viewControllers = [mainTab, categoriesTab, settingsTab]
         tabBarController.selectedIndex = 0

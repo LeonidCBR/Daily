@@ -9,20 +9,23 @@
 import UIKit
 import JTAppleCalendar
 
-class MainViewController: UIViewController {
 
-    
-    // TODO: - DO NOT allow select a blank day
-    
+class MainViewController: UIViewController {
     
     // MARK: - Properties
     private let calendarCellIdentifier = "DateCell"
     private let headerIdentifier = "DateHeader"
-    private let eventsCellIdentifier = "EventCell"
+    private let eventCellIdentifier = "EventCell"
     
     private let headerHeight: CGFloat = 150.0
     
-    private var events = [Event]()
+    private var events: [Event] = [
+        Event(text: "test event 1", datetime: Date(),
+              category: ECategory(name: "test cat", color: UIColor.blue)),
+        Event(text: "посмотреть фильм", datetime: Date(),
+              category: ECategory(name: "test cat 2", color: UIColor.red)),
+        Event(text: "сделать что-нибудь хорошее", datetime: Date(),
+              category: ECategory(name: "test cat", color: UIColor.blue))]
     
     private let dateFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -41,50 +44,18 @@ class MainViewController: UIViewController {
     // MARK: - UI Properties
     private let topImage: UIImageView = {
         let imageView = UIImageView(image: .init(imageLiteralResourceName: "sky-640"))
-        imageView.backgroundColor = .white
+//        imageView.backgroundColor = .white
         return imageView
     }()
-    
-    /*
-    private let monthLabel: UILabel = {
-        let label = UILabel()
-//        label.text = "MONTH"
-        label.font = UIFont(name: "HelveticaNeue-Bold", size: 20.0)
-        label.textAlignment = .center
-        label.textColor = .white
-        label.backgroundColor = .systemTeal
-        label.clipsToBounds = true
-//        label.layer.borderWidth = 3.0
-//        label.layer.borderColor = UIColor.red.cgColor
-        label.layer.cornerRadius = 20.0
-        return label
-    }()
-    
-    private let yearLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "HelveticaNeue-Bold", size: 15.0)
-        label.textAlignment = .center
-        label.textColor = .white
-//        label.backgroundColor = .systemTeal
-//        label.clipsToBounds = true
-        //        label.layer.borderWidth = 3.0
-        //        label.layer.borderColor = UIColor.red.cgColor
-//        label.layer.cornerRadius = 20.0
-        return label
-    }()
-    */
-    
    
+    // Plus button
     private let newEventButton: UIButton = {
         let button = UIButton()
         /*
         let img = UIImageView(image: UIImage.init(systemName: "plus.circle")?.withRenderingMode(.alwaysOriginal))
         img.contentMode = .scaleAspectFill
-        img.tintColor = .red
-        button.imageView = img
         */
 //        button.setImage(UIImage.init(systemName: "plus.circle"), for: .normal)
-//        button.backgroundColor = .systemPink
         button.setBackgroundImage(UIImage.init(systemName: "plus.circle"), for: .normal)
         button.tintColor = .white
         
@@ -119,50 +90,21 @@ class MainViewController: UIViewController {
     }()
     
     
-    
-    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let testCategory = ECategory(name: "test cat", color: UIColor.blue)        
-        events.append(Event(text: "test event 1", datetime: Date(), category: testCategory))
-        events.append(Event(text: "посмотреть фильм", datetime: Date(), category: testCategory))
-        events.append(Event(text: "сделать что-нибудь хорошее", datetime: Date(), category: testCategory))
-        
-//        title = "Main"
+        title = "Main"
         view.backgroundColor = .systemTeal
 //        view.backgroundColor = UIColor(hexRGB: "#341f97")
         
-        /*
-        // testing
-        
-        let dF = DateFormatter()
-        dF.dateStyle = .medium
-        dF.timeStyle = .none
-         
-        let d = Date(timeIntervalSinceReferenceDate: 118800)
-         
-        // US English Locale (en_US)
-        dF.locale = Locale(identifier: "ru_RU")
-        print(dF.string(from: d)) // Jan 2, 2001
-        */
-
-        
-        
         // Register cells for events
-        eventsTable.register(EventCell.self, forCellReuseIdentifier: eventsCellIdentifier)
+        eventsTable.register(EventCell.self, forCellReuseIdentifier: eventCellIdentifier)
         
         // Set up delegate
         eventsTable.dataSource = self
         eventsTable.delegate = self
-        
-        
-        
-        // !!!
-//        calendarView.contentInsetAdjustmentBehavior = .never
-        
         
 //        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addEvent))
         
@@ -225,6 +167,13 @@ class MainViewController: UIViewController {
         calendarView.calendarDataSource = self
         //calendarView.ibCalendarDelegate
         
+        calendarView.minimumLineSpacing = 0
+        calendarView.minimumInteritemSpacing = 0
+        //calendarView.coordinateSpace // ???
+        //calendarView.isUserInteractionEnabled = true
+        //calendarView.contentInsetAdjustmentBehavior = .never
+        
+        // Scroll and select current date
         calendarView.scrollToDate(Date(), animateScroll: false)
         calendarView.selectDates( [ Date() ] )
     }
@@ -238,28 +187,12 @@ class MainViewController: UIViewController {
                         leading: view.leadingAnchor,
                         trailing: view.trailingAnchor,
                         height: 150)
-        /*
-        // Add month label
-        topImage.addSubview(monthLabel)
-        monthLabel.anchor(top: topImage.topAnchor, paddingTop: 50,
-                          width: 100,
-                          height: 35,
-                          centerX: topImage.centerXAnchor)
-        
-        // Add year label
-        topImage.addSubview(yearLabel)
-        yearLabel.anchor(top: monthLabel.bottomAnchor, paddingTop: 10,
-                        centerX: topImage.centerXAnchor)
-        */
         
         // Add calendar
         view.addSubview(calendarView)
         calendarView.anchor(top: view.topAnchor,
                             leading: view.layoutMarginsGuide.leadingAnchor,
                             trailing: view.layoutMarginsGuide.trailingAnchor)
-        //                         leading: view.leadingAnchor, paddingLeading: 20,
-        //                         trailing: view.trailingAnchor, paddingTrailing: 20,
-        //                         height: (view.layoutMarginsGuide.layoutFrame.width - 40) / 7 * 6 + headerHeight)
         
         // calculate height of calendarView
         // formula: <width> / <count-of-days-in-line> * <count-of-days-in-column> + <header-height>
@@ -272,11 +205,6 @@ class MainViewController: UIViewController {
                        attribute: .width,
                        multiplier: countOfDaysInColumn / countOfDaysInLine,
                        constant: CGFloat(headerHeight)).isActive = true
-      
-        calendarView.minimumLineSpacing = 0
-        calendarView.minimumInteritemSpacing = 0
-        //calendarView.coordinateSpace // ???
-        //calendarView.isUserInteractionEnabled = true
         
         // Add new event button
         view.addSubview(newEventButton)
@@ -477,7 +405,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: eventsCellIdentifier, for: indexPath) as! EventCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: eventCellIdentifier, for: indexPath) as! EventCell
         cell.eventText.text = events[indexPath.row].text
         cell.colorCircle.backgroundColor = events[indexPath.row].category.color
         return cell

@@ -12,14 +12,16 @@ class SettingsController: UIViewController {
 
     // MARK: - Properties
     private let topImage: UIImageView = {
-        let imageView = UIImageView()
-        imageView.backgroundColor = .white
+        let imageView = UIImageView(image: .init(imageLiteralResourceName: "sky-640"))
         return imageView
     }()
     
     private let headerLabel: UILabel = {
         let label = UILabel()
-        label.text = "Settings"
+        label.text = "Настройки"
+        label.textColor = .white
+        label.font = UIFont(name: "Verdana-Bold", size: 25.0)
+        label.textAlignment = .center
         return label
     }()
     
@@ -28,7 +30,7 @@ class SettingsController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-//        title = "Settings"
+        title = "Settings"
         view.backgroundColor = .systemTeal
         
         setupView()
@@ -46,8 +48,9 @@ class SettingsController: UIViewController {
         
         // Add month label
         topImage.addSubview(headerLabel)
-        headerLabel.anchor(top: topImage.topAnchor, paddingTop: 50,
-                          centerX: topImage.centerXAnchor)
+        //top: topImage.topAnchor, paddingTop: 50,
+        headerLabel.anchor(centerX: topImage.centerXAnchor,
+                           centerY: topImage.centerYAnchor)
     }
     
     /*

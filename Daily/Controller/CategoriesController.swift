@@ -11,15 +11,25 @@ import UIKit
 class CategoriesController: UIViewController {
 
     // MARK: - Properties
+    private let categoryCellIdentifier = "CategoryCell"
+    
+    private let categories: [ECategory] = [ECategory(name: "Важные покупки", color: .red),
+                                           ECategory(name: "Разное"),
+                                           ECategory(name: "Поздравить", color: .blue)]
+    
+    
+    // MARK: - UI Properties
     private let topImage: UIImageView = {
-        let imageView = UIImageView()
-        imageView.backgroundColor = .white
+        let imageView = UIImageView(image: .init(imageLiteralResourceName: "sky-640"))
         return imageView
     }()
     
     private let headerLabel: UILabel = {
         let label = UILabel()
-        label.text = "Categories"
+        label.text = "Категории"
+        label.textColor = .white
+        label.font = UIFont(name: "Verdana-Bold", size: 25.0)
+        label.textAlignment = .center
         return label
     }()
     
@@ -35,8 +45,15 @@ class CategoriesController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-//        title = "Categories"
+        title = "Categories"
         view.backgroundColor = .systemTeal
+        
+        // Register cells for events
+        categoriesTable.register(CategoryCell.self, forCellReuseIdentifier: categoryCellIdentifier)
+        
+        // Set up delegate
+        categoriesTable.delegate = self
+        categoriesTable.dataSource = self
         
         setupView()
     }
@@ -53,8 +70,9 @@ class CategoriesController: UIViewController {
         
         // Add month label
         topImage.addSubview(headerLabel)
-        headerLabel.anchor(top: topImage.topAnchor, paddingTop: 50,
-                          centerX: topImage.centerXAnchor)
+        headerLabel.anchor(centerX: topImage.centerXAnchor,
+                          centerY: topImage.centerYAnchor)
+        // (width: 150, height: 40, centerX: centerXAnchor, centerY: centerYAnchor)
         
         // Add table with categories
         view.addSubview(categoriesTable)
@@ -76,4 +94,24 @@ class CategoriesController: UIViewController {
     }
     */
 
+}
+
+extension CategoriesController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return categories.count
+    }
+    
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: categoryCellIdentifier, for: indexPath) as! CategoryCell
+        cell.categoryText.text = categories[indexPath.row].name
+        cell.colorCircle.backgroundColor = categories[indexPath.row].color
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        print("row[\(indexPath.row)] is selected")
+    }
 }

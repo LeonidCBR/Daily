@@ -26,7 +26,8 @@ class DateCell: JTACDayCell { //JTACMonthCell
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .systemTeal
+        backgroundColor = .clear
+        
         selectedBackgroundView = UIView(frame: frame)
         selectedBackgroundView?.layer.cornerRadius = frame.height / 2
 //        selectedBackgroundView.backgroundColor = .white
