@@ -13,7 +13,7 @@ class CategoriesController: UIViewController {
     // MARK: - Properties
     private let categoryCellIdentifier = "CategoryCell"
     
-    private let categories: [ECategory] = [ECategory(name: "Важные покупки", color: .red),
+    private var categories: [ECategory] = [ECategory(name: "Важные покупки", color: .red),
                                            ECategory(name: "Разное"),
                                            ECategory(name: "Поздравить", color: .blue)]
     
@@ -110,8 +110,22 @@ extension CategoriesController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         print("row[\(indexPath.row)] is selected")
     }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            categories.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }        
+    }
+    
+    /*
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        //
+    }
+    */
 }
