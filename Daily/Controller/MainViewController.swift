@@ -118,6 +118,9 @@ class MainViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        // FOR TEST!!!
+        newEventButton.sendActions(for: .touchUpInside)
+        
         // Creating a constraint using NSLayoutConstraint
 //        NSLayoutConstraint(item: calendarView,
 //                           attribute: .height,
@@ -224,13 +227,11 @@ class MainViewController: UIViewController {
 
     
     @objc func addEvent() {
-        print("add new event")
         present(NewEventController(), animated: true, completion: nil)
     }
     
     
     private func selectDate(_ date: Date) {
-        
         dateFormatter.dateFormat = "dd-MM-yyyy"
         print("Selected date is \(dateFormatter.string(from: date))")
     }
