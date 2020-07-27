@@ -95,13 +95,13 @@ class NewEventController: UIViewController {
         mainTable.delegate = self
         mainTable.dataSource = self
         
-        setupView()
+        configureUI()
         
     }
     
     
     // MARK: - Methods
-    private func setupView() {
+    private func configureUI() {
         
         view.addSubview(headerView)
         headerView.anchor(top: view.topAnchor,

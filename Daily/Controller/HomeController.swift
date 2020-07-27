@@ -15,13 +15,14 @@ class HomeController: UIViewController {
     
     // MARK: - Create constants!!!
     
-    
+       
     
     // MARK: - Properties
 //    private let headerIdentifier = "DateHeader"
 //    private let calendarCellIdentifier = "DateCell"
 //    private let eventCellIdentifier = "EventCell"
     
+    static private let newEventButtonSize: CGFloat = 30.0 //40.0
     private let headerHeight: CGFloat = 150.0
     
     private var events: [Event] = [
@@ -53,6 +54,13 @@ class HomeController: UIViewController {
         return imageView
     }()
    
+    private let layerForButton: UIImageView = {
+        let image = UIImageView()
+        image.backgroundColor = .white
+        image.layer.cornerRadius = (newEventButtonSize + 20) / 2 // 20 should replace to "delta"
+        return image
+    }()
+    
     // Plus button
     private let newEventButton: UIButton = {
         let button = UIButton()
@@ -61,7 +69,8 @@ class HomeController: UIViewController {
         img.contentMode = .scaleAspectFill
         */
 //        button.setImage(UIImage.init(systemName: "plus.circle"), for: .normal)
-        button.setBackgroundImage(UIImage.init(systemName: "plus.circle"), for: .normal)
+        
+        button.setBackgroundImage(UIImage.init(systemName: "calendar.badge.plus"), for: .normal)
         button.tintColor = .mainBlue
         
         // v1
@@ -69,10 +78,15 @@ class HomeController: UIViewController {
 //        button.layer.borderColor = UIColor.clear.cgColor
         // v2
         button.backgroundColor = .white
-        button.layer.borderColor = UIColor.white.cgColor
         
+        /* last version
+        button.contentMode = .scaleAspectFit
+        button.clipsToBounds = true
+        button.layer.borderColor = UIColor.white.cgColor
         button.layer.borderWidth = 3.0
-        button.layer.cornerRadius = 20.0
+        button.layer.cornerRadius = newEventButtonSize / 2 //20.0
+        */
+        
         button.addTarget(self, action: #selector(addEvent), for: .touchUpInside)
         return button
     }()
@@ -115,7 +129,7 @@ class HomeController: UIViewController {
         
         configureCalendar()
         
-        setupView()
+        configureUI()
         
     }
 
@@ -187,14 +201,14 @@ class HomeController: UIViewController {
     }
     
     
-    private func setupView() {
+    private func configureUI() {
 
         // Add top image
         view.addSubview(topImage)
         topImage.anchor(top: view.topAnchor,
                         leading: view.leadingAnchor,
                         trailing: view.trailingAnchor,
-                        height: 150)
+                        height: headerHeight) // 150.0
         
         // Add calendar
         view.addSubview(calendarView)
@@ -214,12 +228,19 @@ class HomeController: UIViewController {
                        multiplier: countOfDaysInColumn / countOfDaysInLine,
                        constant: CGFloat(headerHeight)).isActive = true
         
+        // Add layer under the "new event" button
+        view.addSubview(layerForButton)
+        layerForButton.anchor(top: view.topAnchor, paddingTop: 50, //45
+                              trailing: view.trailingAnchor, paddingTrailing: 10,
+                              width: HomeController.newEventButtonSize + 20,
+                              height: HomeController.newEventButtonSize + 20)
+        
         // Add new event button
         view.addSubview(newEventButton)
-        newEventButton.anchor(top: view.topAnchor, paddingTop: 55,
+        newEventButton.anchor(top: view.topAnchor, paddingTop: 60, //55
                               trailing: view.trailingAnchor, paddingTrailing: 20,
-                              width: 40,
-                              height: 40)
+                              width: HomeController.newEventButtonSize,
+                              height: HomeController.newEventButtonSize)
         
         // Add table with events
         view.addSubview(eventsTable)

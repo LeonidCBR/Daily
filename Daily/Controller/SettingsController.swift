@@ -33,12 +33,12 @@ class SettingsController: UIViewController {
 //        title = "Settings"
         view.backgroundColor = .mainBlue
         
-        setupView()
+        configureUI()
     }
     
 
     // MARK: - Methods
-    private func setupView() {
+    private func configureUI() {
         // Add top image
         view.addSubview(topImage)
         topImage.anchor(top: view.topAnchor,
