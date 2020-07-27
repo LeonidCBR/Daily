@@ -16,8 +16,8 @@ class DateHeader: JTACMonthReusableView {
         let label = UILabel()
         label.font = UIFont(name: "Verdana-Bold", size: 25.0)
         label.textAlignment = .center
-        label.textColor = .white
-        label.backgroundColor = .systemTeal
+        label.textColor = .mainBlue
+        label.backgroundColor = .white
         label.clipsToBounds = true
         label.layer.cornerRadius = 20.0
         //label.layer.borderWidth = 3.0

@@ -30,8 +30,8 @@ class SettingsController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "Settings"
-        view.backgroundColor = .systemTeal
+//        title = "Settings"
+        view.backgroundColor = .mainBlue
         
         setupView()
     }

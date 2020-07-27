@@ -118,10 +118,12 @@ extension UIColor {
         return String(format:"#%06x", rgb)
     }
     
-//    static func rgb(red: CGFloat, green: CGFloat, blue: CGFloat) -> UIColor {
-//        return UIColor(red: red/255, green: green/255, blue: blue/255, alpha: 1.0)
-//    }
-//
-//    static let mainBlue = UIColor.rgb(red: 0, green: 150, blue: 255)
+    
+    static func rgb(red: CGFloat, green: CGFloat, blue: CGFloat) -> UIColor {
+        return UIColor(red: red/255, green: green/255, blue: blue/255, alpha: 1.0)
+    }
+
+    
+    static let mainBlue = UIColor.rgb(red: 29, green: 161, blue: 242)
 }
 

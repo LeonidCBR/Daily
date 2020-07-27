@@ -17,36 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        
-        // was
-//        window?.rootViewController = MainViewController()
-        
-        let tabBarController = UITabBarController()
-        
-        let mainTab = MainViewController()
-//        let mainTab = UINavigationController(rootViewController: MainViewController())
-        mainTab.tabBarItem = UITabBarItem(title: "Home", image: nil, tag: 0)
-        
-        /*
-        let tab2 = NewEventController()
-        let tabBarItem2 = UITabBarItem(title: "New event", image: nil, tag: 1)
-        tab2.tabBarItem = tabBarItem2
-        */
-        
-        let categoriesTab = CategoriesController()
-        categoriesTab.tabBarItem = UITabBarItem(title: "Categories", image: nil, tag: 2)
-        
-        let settingsTab = SettingsController()
-        settingsTab.tabBarItem = UITabBarItem(title: "Settings", image: nil, tag: 3)
-        
-        tabBarController.viewControllers = [mainTab, categoriesTab, settingsTab]
-        tabBarController.selectedIndex = 0
-        
-                
-//        print(tabBarController.toolbarItems?.count)
-        window?.rootViewController = tabBarController
-        
-        
+        window?.rootViewController = MainTabBarController()
         window?.makeKeyAndVisible()
     }
 

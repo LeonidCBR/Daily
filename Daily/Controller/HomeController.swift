@@ -10,12 +10,17 @@ import UIKit
 import JTAppleCalendar
 
 
-class MainViewController: UIViewController {
+class HomeController: UIViewController {
+    
+    
+    // MARK: - Create constants!!!
+    
+    
     
     // MARK: - Properties
-    private let calendarCellIdentifier = "DateCell"
-    private let headerIdentifier = "DateHeader"
-    private let eventCellIdentifier = "EventCell"
+//    private let headerIdentifier = "DateHeader"
+//    private let calendarCellIdentifier = "DateCell"
+//    private let eventCellIdentifier = "EventCell"
     
     private let headerHeight: CGFloat = 150.0
     
@@ -57,13 +62,13 @@ class MainViewController: UIViewController {
         */
 //        button.setImage(UIImage.init(systemName: "plus.circle"), for: .normal)
         button.setBackgroundImage(UIImage.init(systemName: "plus.circle"), for: .normal)
-        button.tintColor = .white
+        button.tintColor = .mainBlue
         
         // v1
 //        button.backgroundColor = .clear
 //        button.layer.borderColor = UIColor.clear.cgColor
         // v2
-        button.backgroundColor = .systemTeal
+        button.backgroundColor = .white
         button.layer.borderColor = UIColor.white.cgColor
         
         button.layer.borderWidth = 3.0
@@ -83,7 +88,7 @@ class MainViewController: UIViewController {
     
     private let eventsTable: UITableView = {
         let tableView = UITableView()
-        tableView.backgroundColor = .systemTeal
+        tableView.backgroundColor = .mainBlue
         tableView.separatorStyle = .none
 //        tableView.allowsSelection = false
         return tableView
@@ -95,12 +100,12 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Main"
-        view.backgroundColor = .systemTeal
+//        title = "Main"
+        view.backgroundColor = .mainBlue
 //        view.backgroundColor = UIColor(hexRGB: "#341f97")
         
         // Register cells for events
-        eventsTable.register(EventCell.self, forCellReuseIdentifier: eventCellIdentifier)
+        eventsTable.register(EventCell.self, forCellReuseIdentifier: K.Identifier.eventCell)// eventCellIdentifier)
         
         // Set up delegate
         eventsTable.dataSource = self
@@ -160,10 +165,10 @@ class MainViewController: UIViewController {
     private func configureCalendar() {
         
         // Register cells for calendar
-        calendarView.register(DateCell.self, forCellWithReuseIdentifier: calendarCellIdentifier)
+        calendarView.register(DateCell.self, forCellWithReuseIdentifier: K.Identifier.calendarCell) // calendarCellIdentifier)
         
         // Register header
-        calendarView.register(DateHeader.self, forSupplementaryViewOfKind: JTACMonthView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier)
+        calendarView.register(DateHeader.self, forSupplementaryViewOfKind: JTACMonthView.elementKindSectionHeader, withReuseIdentifier: K.Identifier.calendarHeader) //headerIdentifier)
         
         // Set up delegate
         calendarView.calendarDelegate = self
@@ -240,7 +245,7 @@ class MainViewController: UIViewController {
 
 
 // MARK: - JTACMonthViewDataSource
-extension MainViewController: JTACMonthViewDataSource {
+extension HomeController: JTACMonthViewDataSource {
     func configureCalendar(_ calendar: JTACMonthView) -> ConfigurationParameters {
 
         var dateDelta = DateComponents()
@@ -275,7 +280,7 @@ extension MainViewController: JTACMonthViewDataSource {
 
 
 // MARK: - JTACMonthViewDelegate
-extension MainViewController: JTACMonthViewDelegate {
+extension HomeController: JTACMonthViewDelegate {
     
     func calendar(_ calendar: JTACMonthView, cellForItemAt date: Date, cellState: CellState, indexPath: IndexPath) -> JTACDayCell {
         
@@ -285,7 +290,8 @@ extension MainViewController: JTACMonthViewDelegate {
         //thisMonth
         //followingMonthOutsideBoundary
         
-        let cell = calendar.dequeueReusableJTAppleCell(withReuseIdentifier: calendarCellIdentifier, for: indexPath) as! DateCell
+//        let cell = calendar.dequeueReusableJTAppleCell(withReuseIdentifier: calendarCellIdentifier, for: indexPath) as! DateCell
+        let cell = calendar.dequeueReusableJTAppleCell(withReuseIdentifier: K.Identifier.calendarCell, for: indexPath) as! DateCell
         
         // let's change the color of the current day
         dateFormatter.dateFormat = "dd-MM-yyyy"
@@ -329,7 +335,7 @@ extension MainViewController: JTACMonthViewDelegate {
         
         /*
         if cellState.isSelected {
-            cell.dateLabel.textColor = .systemTeal
+            cell.dateLabel.textColor = .mainBlue
             print("cell is selected")
         } else {
             cell.dateLabel.textColor = .white
@@ -378,7 +384,8 @@ extension MainViewController: JTACMonthViewDelegate {
 
         // When month is changed
         
-        let header = calendar.dequeueReusableJTAppleSupplementaryView(withReuseIdentifier: headerIdentifier, for: indexPath) as! DateHeader
+//        let header = calendar.dequeueReusableJTAppleSupplementaryView(withReuseIdentifier: headerIdentifier, for: indexPath) as! DateHeader
+        let header = calendar.dequeueReusableJTAppleSupplementaryView(withReuseIdentifier: K.Identifier.calendarHeader, for: indexPath) as! DateHeader
         
         dateFormatter.dateFormat = "MMMM"
         header.monthTitle.text = dateFormatter.string(from: range.start)
@@ -400,7 +407,7 @@ extension MainViewController: JTACMonthViewDelegate {
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
-extension MainViewController: UITableViewDelegate, UITableViewDataSource {
+extension HomeController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         events.count
@@ -408,7 +415,8 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: eventCellIdentifier, for: indexPath) as! EventCell
+//        let cell = tableView.dequeueReusableCell(withIdentifier: eventCellIdentifier, for: indexPath) as! EventCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.eventCell, for: indexPath) as! EventCell
         cell.eventText.text = events[indexPath.row].text
         cell.colorCircle.backgroundColor = events[indexPath.row].category.color
         return cell

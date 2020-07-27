@@ -8,176 +8,10 @@
 
 import UIKit
 
-// MOVE IT TO STANDALONE FILES !!!
-
-// make new class for cell with toggle
-
-// set height of cell and animation
+// TODO: - Set height of cell and animation
 
 // read "Creating self-sizing table view cells"
 // read contentView
-
-class NewEventTextCell: UITableViewCell {
-    
-    // MARK: - Properties
-    let textEvent: UITextField = {
-        let text = UITextField()
-        text.borderStyle = .roundedRect
-        return text
-    }()
-    
-    // MARK: - Init
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-//        backgroundColor = .yellow
-//        contentView.backgroundColor = .green
-        
-        addSubview(textEvent)
-        textEvent.anchor(top: layoutMarginsGuide.topAnchor,
-                         bottom: layoutMarginsGuide.bottomAnchor,
-                         leading: layoutMarginsGuide.leadingAnchor,
-                         trailing: layoutMarginsGuide.trailingAnchor)
-//        textEvent.anchor(top: topAnchor, paddingTop: 0,
-//                         bottom: bottomAnchor, paddingBottom: 0,
-//                         leading: leadingAnchor, paddingLeading: 0,
-//                         trailing: trailingAnchor, paddingTrailing: 0)
-
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-}
-
-
-
-class NewEventLabelsCell: UITableViewCell {
-    
-    // MARK: - Properties
-    let leftLabel: UILabel = {
-        let label = UILabel()
-        return label
-    }()
-    
-    let rightLabel: UILabel = {
-        let label = UILabel()
-        return label
-    }()
-    
-    // MARK: - Init
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-//        backgroundColor = .blue
-        
-        addSubview(leftLabel)
-        leftLabel.anchor(leading: layoutMarginsGuide.leadingAnchor,
-                         centerY: centerYAnchor)
-        
-        addSubview(rightLabel)
-        rightLabel.anchor(trailing: layoutMarginsGuide.trailingAnchor,
-                          centerY: centerYAnchor)
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-}
-
-
-
-class NewEventToggleCell: UITableViewCell {
-    let label: UILabel = {
-        let label = UILabel()
-        return label
-    }()
-    
-    let toggle: UISwitch = {
-        let sw = UISwitch()
-        sw.isOn = true
-        return sw
-    }()
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-//        backgroundColor = .yellow
-        
-        addSubview(label)
-        label.anchor(leading: layoutMarginsGuide.leadingAnchor,
-                         centerY: centerYAnchor)
-        
-        addSubview(toggle)
-        toggle.anchor(trailing: layoutMarginsGuide.trailingAnchor,
-                          centerY: centerYAnchor)
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
-}
-
-
-
-class NewEventPickerCell: UITableViewCell {
-    // MARK: - Properties
-    let pickerView: UIPickerView = {
-        let picker = UIPickerView()
-        return picker
-    }()
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-//        backgroundColor = .brown
-        
-        // TODO: - set up height
-        
-        addSubview(pickerView)
-        pickerView.anchor(leading: leadingAnchor,
-                          trailing: trailingAnchor,
-//                          height: 100, // set up later
-                          centerY: centerYAnchor)
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-}
-
-
-
-class NewEventDatePickerCell: UITableViewCell {
-    
-    // MARK: - Properties
-    let datePicker: UIDatePicker = {
-        let dPicker = UIDatePicker()
-        // height = 216
-        dPicker.locale = .init(identifier: "ru_RU")
-        return dPicker
-    }()
-    
-    // MARK: - Init
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-//        backgroundColor = .blue
-        
-        addSubview(datePicker)
-        datePicker.anchor(leading: leadingAnchor,
-                          trailing: trailingAnchor,
-//                          height: 216, // set up later
-                          centerY: centerYAnchor)
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-}
-
-
 
 class NewEventController: UIViewController {
 
@@ -187,11 +21,11 @@ class NewEventController: UIViewController {
                                            ECategory(name: "Поздравить", color: .blue)]
     
     // MARK: - Properties
-    private let textCellIdentifier = "NewEventTextCell"
-    private let labelsCellIdentifier = "NewEventLabelsCell"
-    private let pickerCellIdentifier = "NewEventPickerCell"
-    private let datePickerCellIdentifier = "NewEventDatePickerCell"
-    private let toggleCellIdentifier = "NewEventToggleCell"
+    private let textCellIdentifier = "NETextCell"
+    private let labelsCellIdentifier = "NELabelsCell"
+    private let pickerCellIdentifier = "NEPickerCell"
+    private let datePickerCellIdentifier = "NEDatePickerCell"
+    private let toggleCellIdentifier = "NEToggleCell"
 
     let rowDatePickerHeight: CGFloat = 216.0
     let rowPickerViewHeight: CGFloat = 150.0
@@ -203,13 +37,13 @@ class NewEventController: UIViewController {
     // MARK: - UI Properties
     private let headerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemTeal
+        view.backgroundColor = .mainBlue
         return view
     }()
     
     private let headerLabel: UILabel = {
         let label = UILabel()
-        label.text = "New event"
+        label.text = "Новое событие"
         return label
     }()
     
@@ -233,7 +67,7 @@ class NewEventController: UIViewController {
     
     private let mainTable: UITableView = {
         let tableView = UITableView()
-//        tableView.backgroundColor = .systemTeal
+//        tableView.backgroundColor = .mainBlue
         tableView.separatorStyle = .singleLine
         tableView.separatorInset.left = 0
         tableView.separatorInset.right = 0
@@ -251,11 +85,11 @@ class NewEventController: UIViewController {
 //        tabBarItem = tbItem
         
         // Register cells
-        mainTable.register(NewEventTextCell.self, forCellReuseIdentifier: textCellIdentifier)
-        mainTable.register(NewEventLabelsCell.self, forCellReuseIdentifier: labelsCellIdentifier)
-        mainTable.register(NewEventPickerCell.self, forCellReuseIdentifier: pickerCellIdentifier)
-        mainTable.register(NewEventDatePickerCell.self, forCellReuseIdentifier: datePickerCellIdentifier)
-        mainTable.register(NewEventToggleCell.self, forCellReuseIdentifier: toggleCellIdentifier)
+        mainTable.register(NETextCell.self, forCellReuseIdentifier: textCellIdentifier)
+        mainTable.register(NELabelsCell.self, forCellReuseIdentifier: labelsCellIdentifier)
+        mainTable.register(NEPickerCell.self, forCellReuseIdentifier: pickerCellIdentifier)
+        mainTable.register(NEDatePickerCell.self, forCellReuseIdentifier: datePickerCellIdentifier)
+        mainTable.register(NEToggleCell.self, forCellReuseIdentifier: toggleCellIdentifier)
         
         // Set up delegate
         mainTable.delegate = self
@@ -361,20 +195,20 @@ extension NewEventController: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.section {
         case 0:
             // Create cell for text of new event
-            let cell = tableView.dequeueReusableCell(withIdentifier: textCellIdentifier, for: indexPath) as! NewEventTextCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: textCellIdentifier, for: indexPath) as! NETextCell
             return cell
             
         case 1:
             if indexPath.row == 0 {
                 // Create cell for chosen category
-                let cell = tableView.dequeueReusableCell(withIdentifier: labelsCellIdentifier, for: indexPath) as! NewEventLabelsCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: labelsCellIdentifier, for: indexPath) as! NELabelsCell
                 cell.leftLabel.text = "Категория:"
                 cell.rightLabel.text = "Важное"
                 return cell
                 
             } else {
                 // List of categories
-                let cell = tableView.dequeueReusableCell(withIdentifier: pickerCellIdentifier, for: indexPath) as! NewEventPickerCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: pickerCellIdentifier, for: indexPath) as! NEPickerCell
                 cell.pickerView.delegate = self
                 cell.pickerView.dataSource = self
                 cell.pickerView.heightAnchor.constraint(equalToConstant: rowPickerViewHeight).isActive = true
@@ -384,14 +218,14 @@ extension NewEventController: UITableViewDelegate, UITableViewDataSource {
         case 2:
             if indexPath.row == 0 {
                 // Create cell for date of new event
-                let cell = tableView.dequeueReusableCell(withIdentifier: labelsCellIdentifier, for: indexPath) as! NewEventLabelsCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: labelsCellIdentifier, for: indexPath) as! NELabelsCell
                 cell.leftLabel.text = "Дата:"
                 cell.rightLabel.text = "12.05.2020"
                 return cell
                 
             } else {
                 // Event's date picker
-                let cell = tableView.dequeueReusableCell(withIdentifier: datePickerCellIdentifier, for: indexPath) as! NewEventDatePickerCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: datePickerCellIdentifier, for: indexPath) as! NEDatePickerCell
                 cell.datePicker.datePickerMode = .date
                 cell.datePicker.heightAnchor.constraint(equalToConstant: rowDatePickerHeight).isActive = true
                 return cell
@@ -401,20 +235,20 @@ extension NewEventController: UITableViewDelegate, UITableViewDataSource {
             // Alert
             if indexPath.row == 0 {
                 // Create cell for reminder
-                let cell = tableView.dequeueReusableCell(withIdentifier: toggleCellIdentifier, for: indexPath) as! NewEventToggleCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: toggleCellIdentifier, for: indexPath) as! NEToggleCell
                 cell.label.text = "Напомнить"
                 return cell
                 
             } else if indexPath.row == 1 {
                 // Chosen date of the alert
-                let cell = tableView.dequeueReusableCell(withIdentifier: labelsCellIdentifier, for: indexPath) as! NewEventLabelsCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: labelsCellIdentifier, for: indexPath) as! NELabelsCell
                 cell.leftLabel.text = "Alert"
                 cell.rightLabel.text = "12.05.2020 12:35"
                 return cell
                 
             } else {
                 // Date picker of the alert
-                let cell = tableView.dequeueReusableCell(withIdentifier: datePickerCellIdentifier, for: indexPath) as! NewEventDatePickerCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: datePickerCellIdentifier, for: indexPath) as! NEDatePickerCell
                 cell.datePicker.datePickerMode = .dateAndTime
                 cell.datePicker.heightAnchor.constraint(equalToConstant: rowDatePickerHeight).isActive = true
                 return cell
@@ -429,59 +263,59 @@ extension NewEventController: UITableViewDelegate, UITableViewDataSource {
         case 0:
             // Create cell for text of new event
 //            cell = tableView.dequeueReusableCell(withIdentifier: textCellIdentifier, for: indexPath)
-            let cell = tableView.dequeueReusableCell(withIdentifier: textCellIdentifier, for: indexPath) as! NewEventTextCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: textCellIdentifier, for: indexPath) as! NETextCell
             return cell
             
         case 1:
             // Create cell for chosen category
 //            cell = tableView.dequeueReusableCell(withIdentifier: labelsCellIdentifier, for: indexPath)
-//            (cell as! NewEventLabelsCell).toggle.isHidden = true
-//            (cell as! NewEventLabelsCell).leftLabel.text = "Категория:"
-//            (cell as! NewEventLabelsCell).rightLabel.text = "Важное"
-            let cell = tableView.dequeueReusableCell(withIdentifier: labelsCellIdentifier, for: indexPath) as! NewEventLabelsCell
+//            (cell as! NELabelsCell).toggle.isHidden = true
+//            (cell as! NELabelsCell).leftLabel.text = "Категория:"
+//            (cell as! NELabelsCell).rightLabel.text = "Важное"
+            let cell = tableView.dequeueReusableCell(withIdentifier: labelsCellIdentifier, for: indexPath) as! NELabelsCell
             cell.leftLabel.text = "Категория:"
             cell.rightLabel.text = "Важное"
             return cell
             
         case 2:
-            let cell = tableView.dequeueReusableCell(withIdentifier: pickerCellIdentifier, for: indexPath) as! NewEventPickerCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: pickerCellIdentifier, for: indexPath) as! NEPickerCell
 //            cell.pickerView.dataSource = self
             return cell
             
         case 3:
             // Create cell for date of new event
 //            cell = tableView.dequeueReusableCell(withIdentifier: labelsCellIdentifier, for: indexPath)
-//            (cell as! NewEventLabelsCell).leftLabel.text = "Дата:"
-//            (cell as! NewEventLabelsCell).rightLabel.text = "12.05.2020"
-            let cell = tableView.dequeueReusableCell(withIdentifier: labelsCellIdentifier, for: indexPath) as! NewEventLabelsCell
+//            (cell as! NELabelsCell).leftLabel.text = "Дата:"
+//            (cell as! NELabelsCell).rightLabel.text = "12.05.2020"
+            let cell = tableView.dequeueReusableCell(withIdentifier: labelsCellIdentifier, for: indexPath) as! NELabelsCell
             cell.leftLabel.text = "Дата:"
             cell.rightLabel.text = "12.05.2020"
             return cell
             
         case 4:
             // event's date picker
-            let cell = tableView.dequeueReusableCell(withIdentifier: datePickerCellIdentifier, for: indexPath) as! NewEventDatePickerCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: datePickerCellIdentifier, for: indexPath) as! NEDatePickerCell
             cell.datePicker.datePickerMode = .date
             return cell
             
         case 5:
             // Create cell for reminder
 //            cell = tableView.dequeueReusableCell(withIdentifier: labelsCellIdentifier, for: indexPath)
-//            cell = NewEventLabelsCell(style: .default, reuseIdentifier: labelsCellIdentifier, showToggle: true)
-//            (cell as! NewEventLabelsCell).leftLabel.text = "Напомнить:"
-//            (cell as! NewEventLabelsCell).rightLabel.text = "Нет" //"13.05.2020 14:30"
-            let cell = tableView.dequeueReusableCell(withIdentifier: toggleCellIdentifier, for: indexPath) as! NewEventToggleCell
+//            cell = NELabelsCell(style: .default, reuseIdentifier: labelsCellIdentifier, showToggle: true)
+//            (cell as! NELabelsCell).leftLabel.text = "Напомнить:"
+//            (cell as! NELabelsCell).rightLabel.text = "Нет" //"13.05.2020 14:30"
+            let cell = tableView.dequeueReusableCell(withIdentifier: toggleCellIdentifier, for: indexPath) as! NEToggleCell
             cell.label.text = "Напомнить"
             return cell
             
         case 6:
-            let cell = NewEventLabelsCell()
+            let cell = NELabelsCell()
             cell.leftLabel.text = "Alert"
             cell.rightLabel.text = "12.05.2020 12:35"
             return cell
             
         case 7:
-            let cell = NewEventDatePickerCell()
+            let cell = NEDatePickerCell()
             cell.datePicker.datePickerMode = .dateAndTime
             return cell
             

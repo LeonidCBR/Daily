@@ -35,7 +35,7 @@ class CategoriesController: UIViewController {
     
     private let categoriesTable: UITableView = {
         let tableView = UITableView()
-        tableView.backgroundColor = .systemTeal
+        tableView.backgroundColor = .mainBlue
         tableView.separatorStyle = .none
         return tableView
     }()
@@ -45,8 +45,8 @@ class CategoriesController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "Categories"
-        view.backgroundColor = .systemTeal
+//        title = "Categories"
+        view.backgroundColor = .mainBlue
         
         // Register cells for events
         categoriesTable.register(CategoryCell.self, forCellReuseIdentifier: categoryCellIdentifier)
