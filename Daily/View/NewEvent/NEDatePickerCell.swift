@@ -22,12 +22,15 @@ class NEDatePickerCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-//        backgroundColor = .blue
+        backgroundColor = .mainBlue
+        clipsToBounds = true
         
+        // height - 216
         addSubview(datePicker)
         datePicker.anchor(leading: leadingAnchor,
                           trailing: trailingAnchor,
-//                          height: 216, // set up later
+                          height: K.Height.rowDatePicker,
+                          centerX: centerXAnchor, // realy need???      ?????
                           centerY: centerYAnchor)
     }
     

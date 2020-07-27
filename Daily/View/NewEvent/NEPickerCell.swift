@@ -18,14 +18,14 @@ class NEPickerCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-//        backgroundColor = .brown
-        
-        // TODO: - set up height
+        backgroundColor = .mainBlue
+        clipsToBounds = true
         
         addSubview(pickerView)
         pickerView.anchor(leading: leadingAnchor,
                           trailing: trailingAnchor,
-//                          height: 100, // set up later
+                          height: K.Height.rowPickerView,
+                          centerX: centerXAnchor,
                           centerY: centerYAnchor)
     }
     

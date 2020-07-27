@@ -6,7 +6,7 @@
 //  Copyright © 2020 Motodolphin. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 struct K {
     
@@ -21,4 +21,14 @@ struct K {
         static let categories = "Категории"
         static let settings = "Настройки"
     }
+    
+    struct Height {
+        static let rowDatePicker: CGFloat = 216.0
+        static let rowPickerView: CGFloat = 150.0
+        static let rowTextField: CGFloat = 60.0
+        static let row: CGFloat = 43.5
+    }
 }
+
+
+

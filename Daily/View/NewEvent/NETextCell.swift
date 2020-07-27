@@ -13,6 +13,7 @@ class NETextCell: UITableViewCell {
     // MARK: - Properties
     let textEvent: UITextField = {
         let text = UITextField()
+        text.textColor = .mainBlue
         text.borderStyle = .roundedRect
         return text
     }()
@@ -21,7 +22,8 @@ class NETextCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-//        backgroundColor = .yellow
+        backgroundColor = .mainBlue
+        clipsToBounds = true
 //        contentView.backgroundColor = .green
         
         addSubview(textEvent)

@@ -11,19 +11,21 @@ import UIKit
 class NEToggleCell: UITableViewCell {
     let label: UILabel = {
         let label = UILabel()
+        label.textColor = .white
         return label
     }()
     
     let toggle: UISwitch = {
         let sw = UISwitch()
-        sw.isOn = true
+        sw.isOn = false
         return sw
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-//        backgroundColor = .yellow
+        backgroundColor = .mainBlue
+        clipsToBounds = true
         
         addSubview(label)
         label.anchor(leading: layoutMarginsGuide.leadingAnchor,

@@ -8,7 +8,7 @@
 
 import UIKit
 
-// TODO: - Set height of cell and animation
+// TODO: - Set sections
 
 // read "Creating self-sizing table view cells"
 // read contentView
@@ -27,23 +27,30 @@ class NewEventController: UIViewController {
     private let datePickerCellIdentifier = "NEDatePickerCell"
     private let toggleCellIdentifier = "NEToggleCell"
 
-    let rowDatePickerHeight: CGFloat = 216.0
-    let rowPickerViewHeight: CGFloat = 150.0
-    let rowHeight: CGFloat = 43.5
+//    let rowDatePickerHeight: CGFloat = 216.0
+//    let rowPickerViewHeight: CGFloat = 150.0
+//    let rowTextFieldHeight: CGFloat = 60.0
+//    let rowHeight: CGFloat = 43.5
     
-    var datePickerHeight: CGFloat = 0.0
+    // Mutable heights for hidding rows
+    //var datePickerHeight: CGFloat = 0.0
+    var categoriesHeight: CGFloat = 0.0
+    var eventDateHeight: CGFloat = 0.0
+    var alertLabelHeight: CGFloat = 0.0
+    var alertTimeHeight: CGFloat = 0.0
     
     
     // MARK: - UI Properties
     private let headerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .mainBlue
+        view.backgroundColor = .white
         return view
     }()
     
     private let headerLabel: UILabel = {
         let label = UILabel()
         label.text = "Новое событие"
+        label.textColor = .mainBlue
         return label
     }()
     
@@ -51,7 +58,7 @@ class NewEventController: UIViewController {
         let button = UIButton()
         button.setTitle("Cancel", for: .normal)
 //        button.setAttributedTitle(.init(string: "Attributed string"), for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.systemPink, for: .normal)
         button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -60,26 +67,28 @@ class NewEventController: UIViewController {
         let button = UIButton()
         button.setTitle("Save", for: .normal)
 //        button.tintColor = .blue
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.mainBlue, for: .normal)
         button.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         return button
     }()
     
     private let mainTable: UITableView = {
         let tableView = UITableView()
-//        tableView.backgroundColor = .mainBlue
+        tableView.backgroundColor = .mainBlue
         tableView.separatorStyle = .singleLine
         tableView.separatorInset.left = 0
         tableView.separatorInset.right = 0
         return tableView
     }()
     
+    
     // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
 //        title = "New event"
-        view.backgroundColor = .white
+        view.backgroundColor = .mainBlue
         
 //        let tbItem = UITabBarItem(title: "New event", image: nil, tag: 1)
 //        tabBarItem = tbItem
@@ -97,10 +106,28 @@ class NewEventController: UIViewController {
         
         configureUI()
         
+        // Hide keyboard when tap out of TextFields
+        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
+        /*
+         There could be issues if you are dealing with tableviews and adding this tap gesture, selecting the rows, didSelectRowAtIndex path could not be fired until pressed long.
+         Solution:
+         
+            tap.cancelsTouchesInView = false
+         
+         */
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+        
     }
+    
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//        mainTable.separatorInset.left
+//    }
     
     
     // MARK: - Methods
+    
     private func configureUI() {
         
         view.addSubview(headerView)
@@ -122,13 +149,14 @@ class NewEventController: UIViewController {
         
         view.addSubview(mainTable)
         mainTable.anchor(top: headerView.bottomAnchor, paddingTop: 20,
-                         bottom: view.layoutMarginsGuide.bottomAnchor,
+                         bottom: view.safeAreaLayoutGuide.bottomAnchor, // view.layoutMarginsGuide.bottomAnchor,
                          leading: view.leadingAnchor,
                          trailing: view.trailingAnchor)
 
     }
     
     
+    // MARK: - Selectors
     @objc func cancelButtonTapped() {
         dismiss(animated: true, completion: nil)
     }
@@ -143,12 +171,17 @@ class NewEventController: UIViewController {
 //        }
         
     }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-//        mainTable.separatorInset.left
+    
+    @objc func toggleTapped(_ sender: UISwitch) {
+        // Hide alert
+        UIView.animate(withDuration: 0.3) {
+            self.alertLabelHeight = self.alertLabelHeight == 0 ? K.Height.row : 0
+            self.mainTable.beginUpdates()
+            self.mainTable.endUpdates()
+        }
     }
+
+
 
 }
 
@@ -211,7 +244,7 @@ extension NewEventController: UITableViewDelegate, UITableViewDataSource {
                 let cell = tableView.dequeueReusableCell(withIdentifier: pickerCellIdentifier, for: indexPath) as! NEPickerCell
                 cell.pickerView.delegate = self
                 cell.pickerView.dataSource = self
-                cell.pickerView.heightAnchor.constraint(equalToConstant: rowPickerViewHeight).isActive = true
+                cell.pickerView.heightAnchor.constraint(equalToConstant: K.Height.rowPickerView).isActive = true
                 return cell
             }
             
@@ -227,7 +260,7 @@ extension NewEventController: UITableViewDelegate, UITableViewDataSource {
                 // Event's date picker
                 let cell = tableView.dequeueReusableCell(withIdentifier: datePickerCellIdentifier, for: indexPath) as! NEDatePickerCell
                 cell.datePicker.datePickerMode = .date
-                cell.datePicker.heightAnchor.constraint(equalToConstant: rowDatePickerHeight).isActive = true
+                cell.datePicker.heightAnchor.constraint(equalToConstant: K.Height.rowDatePicker).isActive = true
                 return cell
             }
             
@@ -237,6 +270,7 @@ extension NewEventController: UITableViewDelegate, UITableViewDataSource {
                 // Create cell for reminder
                 let cell = tableView.dequeueReusableCell(withIdentifier: toggleCellIdentifier, for: indexPath) as! NEToggleCell
                 cell.label.text = "Напомнить"
+                cell.toggle.addTarget(self, action: #selector(toggleTapped), for: .valueChanged)
                 return cell
                 
             } else if indexPath.row == 1 {
@@ -250,7 +284,7 @@ extension NewEventController: UITableViewDelegate, UITableViewDataSource {
                 // Date picker of the alert
                 let cell = tableView.dequeueReusableCell(withIdentifier: datePickerCellIdentifier, for: indexPath) as! NEDatePickerCell
                 cell.datePicker.datePickerMode = .dateAndTime
-                cell.datePicker.heightAnchor.constraint(equalToConstant: rowDatePickerHeight).isActive = true
+                cell.datePicker.heightAnchor.constraint(equalToConstant: K.Height.rowDatePicker).isActive = true
                 return cell
             }
         default:
@@ -331,30 +365,85 @@ extension NewEventController: UITableViewDelegate, UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // check indexPath and hide or show rows
+        
         tableView.deselectRow(at: indexPath, animated: true)
         
-        // check indexPath and hide or show rows
+        // tap to date
+        if (indexPath.section == 1 && indexPath.row == 0) {
+//            print("hide categories")
+            UIView.animate(withDuration: 0.3) {
+                // show or hide date picker
+                self.categoriesHeight = self.categoriesHeight == 0 ? K.Height.rowPickerView : 0
+                tableView.beginUpdates()
+                tableView.endUpdates()
+            }
+            
+        } else if (indexPath.section == 2 && indexPath.row == 0) {
+            print("hide event date")
+            UIView.animate(withDuration: 0.3) {
+                // show or hide date picker
+                self.eventDateHeight = self.eventDateHeight == 0 ? K.Height.rowDatePicker : 0
+                tableView.beginUpdates()
+                tableView.endUpdates()
+            }
+            
+        } else if (indexPath.section == 3 && indexPath.row == 1) {
+            print("hide alert time")
+            UIView.animate(withDuration: 0.3) {
+                // show or hide date picker
+                self.alertTimeHeight = self.alertTimeHeight == 0 ? K.Height.rowDatePicker : 0
+                tableView.beginUpdates()
+                tableView.endUpdates()
+            }
+        }
     }
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        //        if indexPath.row == 2 || indexPath.row == 4 || indexPath.row == 7 {
-        if (indexPath.section == 1 && indexPath.row == 1) {
-            return rowPickerViewHeight
-        } else if
-            (indexPath.section == 2 && indexPath.row == 1) ||
-            (indexPath.section == 3 && indexPath.row == 2) {
-            // TODO: - change
-            return rowDatePickerHeight
-            
-            //        } else if indexPath.row == 0 {
-        } else if indexPath.section == 0 && indexPath.row == 0 {
-            // set up the height of the cell with text field
-            return 60
-            
-        } else {
-            return rowHeight
+        
+        /*
+         Section 0 -> Event text
+         Section 1 -> Categories
+         Section 2 -> Event date
+         Section 1 -> Alert time
+         */
+        let row = indexPath.row
+        
+        switch indexPath.section {
+        case 0 where row == 0: return K.Height.rowTextField
+        case 1 where row == 1: return categoriesHeight
+        case 2 where row == 1: return eventDateHeight
+        case 3 where row == 1: return alertLabelHeight
+        case 3 where row == 2: return alertTimeHeight
+        default: return K.Height.row
         }
+        
+        // !!!!
+//        return K.Height.row
+        
+        
+        //        if indexPath.section == 1 && indexPath.row == 1 {
+        //            return categoriesHeight //rowPickerViewHeight
+        //
+        //        } else if indexPath.section == 2 && indexPath.row == 1 {
+        //            return eventDateHeight //rowDatePickerHeight
+        //
+        //        } else if indexPath.section == 3 {
+        //            if indexPath.row == 1 {
+        //                return alertLabelHeight
+        //
+        //            } else if indexPath.row == 2 {
+        //                return alertTimeHeight
+        //            }
+        //            //        } else if indexPath.row == 0 {
+        //        } else if indexPath.section == 0 && indexPath.row == 0 {
+        //            // set up the height of the cell with text field
+        //            return K.Height.rowTextField
+        //
+        //        } else {
+        //            return K.Height.row
+        //        }
     }
 }
 

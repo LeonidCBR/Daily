@@ -14,11 +14,13 @@ class NELabelsCell: UITableViewCell {
     // MARK: - Properties
     let leftLabel: UILabel = {
         let label = UILabel()
+        label.textColor = .white
         return label
     }()
     
     let rightLabel: UILabel = {
         let label = UILabel()
+        label.textColor = .white
         return label
     }()
     
@@ -26,7 +28,8 @@ class NELabelsCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-//        backgroundColor = .blue
+        backgroundColor = .mainBlue
+        clipsToBounds = true
         
         addSubview(leftLabel)
         leftLabel.anchor(leading: layoutMarginsGuide.leadingAnchor,
