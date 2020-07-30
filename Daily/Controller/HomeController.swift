@@ -138,7 +138,7 @@ class HomeController: UIViewController {
         super.viewDidAppear(animated)
         
         // FOR TEST!!!
-        newEventButton.sendActions(for: .touchUpInside)
+        //newEventButton.sendActions(for: .touchUpInside)
         
         // Creating a constraint using NSLayoutConstraint
 //        NSLayoutConstraint(item: calendarView,
