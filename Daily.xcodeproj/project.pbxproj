@@ -22,6 +22,7 @@
 		D77F5DDC2425EB65009A0460 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77F5DDB2425EB65009A0460 /* HomeController.swift */; };
 		D77F5DE12425EB6D009A0460 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D77F5DE02425EB6D009A0460 /* Assets.xcassets */; };
 		D77F5DE42425EB6D009A0460 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D77F5DE22425EB6D009A0460 /* LaunchScreen.storyboard */; };
+		D7A23F2125CFAE2400B1AE88 /* BaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7A23F2025CFAE2400B1AE88 /* BaseController.swift */; };
 		D7DB23F0248F5EB500D3C47E /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7DB23EF248F5EB500D3C47E /* Event.swift */; };
 		D7DB23F2248F7B2100D3C47E /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7DB23F1248F7B2100D3C47E /* EventCell.swift */; };
 		D7E928182425F98100EA8362 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E928172425F98100EA8362 /* Extensions.swift */; };
@@ -52,6 +53,7 @@
 		D77F5DE02425EB6D009A0460 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D77F5DE32425EB6D009A0460 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D77F5DE52425EB6D009A0460 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D7A23F2025CFAE2400B1AE88 /* BaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseController.swift; sourceTree = "<group>"; };
 		D7DB23EF248F5EB500D3C47E /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		D7DB23F1248F7B2100D3C47E /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
 		D7E928172425F98100EA8362 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 				D7F68597248CBF5C00E963AA /* CategoriesController.swift */,
 				D7F68599248CBF8F00E963AA /* SettingsController.swift */,
 				D7F68595248CB65900E963AA /* NewEventController.swift */,
+				D7A23F2025CFAE2400B1AE88 /* BaseController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -317,6 +320,7 @@
 				D766FE0124CBAE6A0026C1C6 /* MainTabBarController.swift in Sources */,
 				D72DB20A24CE4C95000370B7 /* NEDatePickerCell.swift in Sources */,
 				D7F9EF5F24CE5A30000CCE35 /* Constants.swift in Sources */,
+				D7A23F2125CFAE2400B1AE88 /* BaseController.swift in Sources */,
 				D71F85FF2426417B002D0F4D /* DateCell.swift in Sources */,
 				D7F68596248CB65900E963AA /* NewEventController.swift in Sources */,
 				D7F68598248CBF5C00E963AA /* CategoriesController.swift in Sources */,

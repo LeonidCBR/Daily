@@ -10,7 +10,7 @@ import UIKit
 import JTAppleCalendar
 
 
-class HomeController: UIViewController {
+class HomeController: BaseController {
     
     
     // MARK: - Create constants!!!
@@ -18,9 +18,6 @@ class HomeController: UIViewController {
        
     
     // MARK: - Properties
-//    private let headerIdentifier = "DateHeader"
-//    private let calendarCellIdentifier = "DateCell"
-//    private let eventCellIdentifier = "EventCell"
     
     static private let newEventButtonSize: CGFloat = 30.0 //40.0
     private let headerHeight: CGFloat = 150.0
@@ -48,12 +45,7 @@ class HomeController: UIViewController {
     
     
     // MARK: - UI Properties
-    private let topImage: UIImageView = {
-        let imageView = UIImageView(image: .init(imageLiteralResourceName: "sky-640"))
-//        imageView.backgroundColor = .white
-        return imageView
-    }()
-   
+
     private let layerForButton: UIImageView = {
         let image = UIImageView()
         image.backgroundColor = .white
@@ -113,10 +105,8 @@ class HomeController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-//        title = "Main"
-        view.backgroundColor = .mainBlue
-//        view.backgroundColor = UIColor(hexRGB: "#341f97")
+
+
         
         // Register cells for events
         eventsTable.register(EventCell.self, forCellReuseIdentifier: K.Identifier.eventCell)// eventCellIdentifier)
@@ -202,13 +192,6 @@ class HomeController: UIViewController {
     
     
     private func configureUI() {
-
-        // Add top image
-        view.addSubview(topImage)
-        topImage.anchor(top: view.topAnchor,
-                        leading: view.leadingAnchor,
-                        trailing: view.trailingAnchor,
-                        height: headerHeight) // 150.0
         
         // Add calendar
         view.addSubview(calendarView)
@@ -266,6 +249,7 @@ class HomeController: UIViewController {
 
 
 // MARK: - JTACMonthViewDataSource
+
 extension HomeController: JTACMonthViewDataSource {
     func configureCalendar(_ calendar: JTACMonthView) -> ConfigurationParameters {
 
@@ -301,6 +285,7 @@ extension HomeController: JTACMonthViewDataSource {
 
 
 // MARK: - JTACMonthViewDelegate
+
 extension HomeController: JTACMonthViewDelegate {
     
     func calendar(_ calendar: JTACMonthView, cellForItemAt date: Date, cellState: CellState, indexPath: IndexPath) -> JTACDayCell {
@@ -427,7 +412,9 @@ extension HomeController: JTACMonthViewDelegate {
     
 }
 
+
 // MARK: - UITableViewDelegate, UITableViewDataSource
+
 extension HomeController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CategoriesController: UIViewController {
+class CategoriesController: BaseController {
 
     // MARK: - Properties
     private let categoryCellIdentifier = "CategoryCell"
@@ -19,20 +19,6 @@ class CategoriesController: UIViewController {
     
     
     // MARK: - UI Properties
-    private let topImage: UIImageView = {
-        let imageView = UIImageView(image: .init(imageLiteralResourceName: "sky-640"))
-        return imageView
-    }()
-    
-    private let headerLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Категории"
-        label.textColor = .white
-        label.font = UIFont(name: "Verdana-Bold", size: 25.0)
-        label.textAlignment = .center
-        return label
-    }()
-    
     private let categoriesTable: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .mainBlue
@@ -44,9 +30,6 @@ class CategoriesController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-//        title = "Categories"
-        view.backgroundColor = .mainBlue
         
         // Register cells for events
         categoriesTable.register(CategoryCell.self, forCellReuseIdentifier: categoryCellIdentifier)
@@ -61,40 +44,23 @@ class CategoriesController: UIViewController {
 
     // MARK: - Methods
     private func configureUI() {
-        // Add top image
-        view.addSubview(topImage)
-        topImage.anchor(top: view.topAnchor,
-                        leading: view.leadingAnchor,
-                        trailing: view.trailingAnchor,
-                        height: 150)
         
-        // Add month label
-        topImage.addSubview(headerLabel)
-        headerLabel.anchor(centerX: topImage.centerXAnchor,
-                          centerY: topImage.centerYAnchor)
-        // (width: 150, height: 40, centerX: centerXAnchor, centerY: centerYAnchor)
-        
+        headerLabel.text = "Категории"
+  
         // Add table with categories
         view.addSubview(categoriesTable)
         // safeAreaLayoutGuide
         // layoutMarginsGuide
         categoriesTable.anchor(top: topImage.bottomAnchor,
-                               bottom: view.layoutMarginsGuide.bottomAnchor,
-                               leading: view.layoutMarginsGuide.leadingAnchor,
-                               trailing: view.layoutMarginsGuide.trailingAnchor)
+                               bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                               leading: view.safeAreaLayoutGuide.leadingAnchor,
+                               trailing: view.safeAreaLayoutGuide.trailingAnchor)
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
+
+
+// MARK: - UITableViewDelegate, UITableViewDataSource
 
 extension CategoriesController: UITableViewDelegate, UITableViewDataSource {
     
@@ -123,9 +89,4 @@ extension CategoriesController: UITableViewDelegate, UITableViewDataSource {
         }        
     }
     
-    /*
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        //
-    }
-    */
 }
