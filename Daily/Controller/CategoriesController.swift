@@ -12,7 +12,7 @@ import RealmSwift
 class CategoriesController: BaseController {
 
     // MARK: - Properties
-    private let categoryCellIdentifier = "CategoryCell"
+//    private let categoryCellIdentifier = "CategoryCell"
     private let refreshControl = UIRefreshControl()
     private var notificationToken: NotificationToken?
     
@@ -76,7 +76,8 @@ class CategoriesController: BaseController {
         headerLabel.text = "Категории"
         
         // Register cells for events
-        categoriesTable.register(CategoryCell.self, forCellReuseIdentifier: categoryCellIdentifier)
+        categoriesTable.register(CategoryCell.self, forCellReuseIdentifier: K.Identifier.categoryCell)
+        categoriesTable.register(NETextCell.self, forCellReuseIdentifier: K.Identifier.textCell)
         
         // Set up delegate
         categoriesTable.delegate = self
@@ -97,6 +98,17 @@ class CategoriesController: BaseController {
                                leading: view.safeAreaLayoutGuide.leadingAnchor,
                                trailing: view.safeAreaLayoutGuide.trailingAnchor)
         
+        // Hide keyboard when tap out of TextFields
+        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
+        /*
+         There could be issues if you are dealing with tableviews and adding this tap gesture, selecting the rows, didSelectRowAtIndex path could not be fired until pressed long.
+         Solution:
+         
+            tap.cancelsTouchesInView = false
+         
+         */
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
     }
     
     private func loadCategories() {
@@ -195,12 +207,21 @@ class CategoriesController: BaseController {
 extension CategoriesController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories?.count ?? 0
+//        return categories?.count ?? 0
+        return (categories?.count ?? 0) + 1
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: categoryCellIdentifier, for: indexPath) as! CategoryCell
+        
+        if indexPath.row == categories?.count {
+            let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.textCell, for: indexPath)
+            (cell as! NETextCell).delegate = self
+            return cell
+        }
+        
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.categoryCell, for: indexPath) as! CategoryCell
         
         if let category = categories?[indexPath.row] {
             
@@ -215,6 +236,14 @@ extension CategoriesController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == categories?.count {
+            return 50.0
+        } else {
+            return tableView.estimatedRowHeight
+        }
+    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
@@ -251,4 +280,25 @@ extension CategoriesController: UITableViewDelegate, UITableViewDataSource {
         }        
     }
     
+}
+
+
+// MARK: - NETextCellDelegate
+extension CategoriesController: NETextCellDelegate {
+    
+    func textChanged(_ textCell: NETextCell, newText: String) {
+        guard !newText.isEmpty else { return }
+        
+        // save category
+        print("DEBUG: save category \(newText)")
+        do {
+            let newCategory = Category(name: newText)
+            try PersistentManager.shared.addCategory(newCategory)
+            textCell.clearTextField()
+
+        } catch {
+            // TODO: - Show error message
+            print("DEBUG: ERROR saving context: \(error)")
+        }
+    }
 }

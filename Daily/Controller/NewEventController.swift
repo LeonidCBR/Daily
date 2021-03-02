@@ -24,12 +24,13 @@ class NewEventController: UIViewController {
     // FOR testing
     private let category = Category()
 
-
+/*
     private let textCellIdentifier = "NETextCell"
     private let labelsCellIdentifier = "NELabelsCell"
     private let pickerCellIdentifier = "NEPickerCell"
     private let datePickerCellIdentifier = "NEDatePickerCell"
     private let toggleCellIdentifier = "NEToggleCell"
+    */
 
 //    let rowDatePickerHeight: CGFloat = 216.0
 //    let rowPickerViewHeight: CGFloat = 150.0
@@ -98,11 +99,11 @@ class NewEventController: UIViewController {
 //        tabBarItem = tbItem
         
         // Register cells
-        mainTable.register(NETextCell.self, forCellReuseIdentifier: textCellIdentifier)
-        mainTable.register(NELabelsCell.self, forCellReuseIdentifier: labelsCellIdentifier)
-        mainTable.register(NEPickerCell.self, forCellReuseIdentifier: pickerCellIdentifier)
-        mainTable.register(NEDatePickerCell.self, forCellReuseIdentifier: datePickerCellIdentifier)
-        mainTable.register(NEToggleCell.self, forCellReuseIdentifier: toggleCellIdentifier)
+        mainTable.register(NETextCell.self, forCellReuseIdentifier: K.Identifier.textCell)
+        mainTable.register(NELabelsCell.self, forCellReuseIdentifier: K.Identifier.labelsCell)
+        mainTable.register(NEPickerCell.self, forCellReuseIdentifier: K.Identifier.pickerCell)
+        mainTable.register(NEDatePickerCell.self, forCellReuseIdentifier: K.Identifier.datePickerCell)
+        mainTable.register(NEToggleCell.self, forCellReuseIdentifier: K.Identifier.toggleCell)
         
         // Set up delegate
         mainTable.delegate = self
@@ -247,21 +248,21 @@ extension NewEventController: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.section {
         case 0:
             // Create cell for text of new event
-            let cell = tableView.dequeueReusableCell(withIdentifier: textCellIdentifier, for: indexPath) as! NETextCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.textCell, for: indexPath) as! NETextCell
             cell.delegate = self
             return cell
             
         case 1:
             if indexPath.row == 0 {
                 // Create cell for chosen category
-                let cell = tableView.dequeueReusableCell(withIdentifier: labelsCellIdentifier, for: indexPath) as! NELabelsCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.labelsCell, for: indexPath) as! NELabelsCell
                 cell.leftLabel.text = "Категория:"
                 cell.rightLabel.text = "Важное"
                 return cell
                 
             } else {
                 // List of categories
-                let cell = tableView.dequeueReusableCell(withIdentifier: pickerCellIdentifier, for: indexPath) as! NEPickerCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.pickerCell, for: indexPath) as! NEPickerCell
                 cell.pickerView.delegate = self
                 cell.pickerView.dataSource = self
                 cell.pickerView.heightAnchor.constraint(equalToConstant: K.Height.rowPickerView).isActive = true
@@ -271,14 +272,14 @@ extension NewEventController: UITableViewDelegate, UITableViewDataSource {
         case 2:
             if indexPath.row == 0 {
                 // Create cell for date of new event
-                let cell = tableView.dequeueReusableCell(withIdentifier: labelsCellIdentifier, for: indexPath) as! NELabelsCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.labelsCell, for: indexPath) as! NELabelsCell
                 cell.leftLabel.text = "Дата:"
                 cell.rightLabel.text = "12.05.2020"
                 return cell
                 
             } else {
                 // Event's date picker
-                let cell = tableView.dequeueReusableCell(withIdentifier: datePickerCellIdentifier, for: indexPath) as! NEDatePickerCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.datePickerCell, for: indexPath) as! NEDatePickerCell
                 cell.datePicker.datePickerMode = .date
                 cell.datePicker.heightAnchor.constraint(equalToConstant: K.Height.rowDatePicker).isActive = true
                 return cell
@@ -288,21 +289,21 @@ extension NewEventController: UITableViewDelegate, UITableViewDataSource {
             // Alert
             if indexPath.row == 0 {
                 // Create cell for reminder
-                let cell = tableView.dequeueReusableCell(withIdentifier: toggleCellIdentifier, for: indexPath) as! NEToggleCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.toggleCell, for: indexPath) as! NEToggleCell
                 cell.label.text = "Напомнить"
                 cell.toggle.addTarget(self, action: #selector(toggleTapped), for: .valueChanged)
                 return cell
                 
             } else if indexPath.row == 1 {
                 // Chosen date of the alert
-                let cell = tableView.dequeueReusableCell(withIdentifier: labelsCellIdentifier, for: indexPath) as! NELabelsCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.labelsCell, for: indexPath) as! NELabelsCell
                 cell.leftLabel.text = "Alert"
                 cell.rightLabel.text = "12.05.2020 12:35"
                 return cell
                 
             } else {
                 // Date picker of the alert
-                let cell = tableView.dequeueReusableCell(withIdentifier: datePickerCellIdentifier, for: indexPath) as! NEDatePickerCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.datePickerCell, for: indexPath) as! NEDatePickerCell
                 cell.datePicker.datePickerMode = .dateAndTime
                 cell.datePicker.heightAnchor.constraint(equalToConstant: K.Height.rowDatePicker).isActive = true
                 return cell
@@ -492,7 +493,7 @@ extension NewEventController: UIPickerViewDataSource, UIPickerViewDelegate {
 
 // MARK: - NETextCellDelegate
 extension NewEventController: NETextCellDelegate {
-    func textChanged(newText: String) {
+    func textChanged(_ textCell: NETextCell, newText: String) {
         print("DEBUG: Setting name of the category to [\(newText)]")
         category.name = newText
     }

@@ -14,6 +14,14 @@ struct K {
         static let calendarHeader = "DateHeader"
         static let calendarCell = "DateCell"
         static let eventCell = "EventCell"
+        
+        static let textCell = "NETextCellIdentifier"
+        static let labelsCell = "NELabelsCellIdentifier"
+        static let pickerCell = "NEPickerCellIdentifier"
+        static let datePickerCell = "NEDatePickerCellIdentifier"
+        static let toggleCell = "NEToggleCellIdentifier"
+        
+        static let categoryCell = "CategoryCellIdentifier"
     }
     
     struct TabBarItem {

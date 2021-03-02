@@ -9,7 +9,7 @@
 import UIKit
 
 protocol NETextCellDelegate {
-    func textChanged(newText: String)
+    func textChanged(_ textCell: NETextCell, newText: String)
 }
 
 class NETextCell: UITableViewCell {
@@ -52,8 +52,14 @@ class NETextCell: UITableViewCell {
     
     
     // MARK: - Methods
+    func clearTextField() {
+        textEvent.text = ""
+    }
+    
+    // MARK: - Selectors
+    
     @objc func textChanged() {
         print("DEBUG: - selector editingDidEnd is called")
-        delegate?.textChanged(newText: textEvent.text ?? "")
+        delegate?.textChanged(self, newText: textEvent.text ?? "")
     }
 }
