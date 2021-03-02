@@ -13,6 +13,7 @@ class CategoriesController: BaseController {
 
     // MARK: - Properties
     private let categoryCellIdentifier = "CategoryCell"
+    private let refreshControl = UIRefreshControl()
     private var notificationToken: NotificationToken?
     
     private var categories: Results<Category>?
@@ -50,22 +51,16 @@ class CategoriesController: BaseController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Register cells for events
-        categoriesTable.register(CategoryCell.self, forCellReuseIdentifier: categoryCellIdentifier)
-        
-        // Set up delegate
-        categoriesTable.delegate = self
-        categoriesTable.dataSource = self
-        
         configureUI()
         
         loadCategories()
+        
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
+//    override func viewDidAppear(_ animated: Bool) {
 //
 //        // TODO: - implement observing
-//        loadCategories()
+//        if shouldReloadData { tableView.realoadData() }
 //
 //    }
     
@@ -79,6 +74,19 @@ class CategoriesController: BaseController {
     private func configureUI() {
         
         headerLabel.text = "Категории"
+        
+        // Register cells for events
+        categoriesTable.register(CategoryCell.self, forCellReuseIdentifier: categoryCellIdentifier)
+        
+        // Set up delegate
+        categoriesTable.delegate = self
+        categoriesTable.dataSource = self
+        
+        refreshControl.tintColor = UIColor(red:0.25, green:0.72, blue:0.85, alpha:1.0)
+        refreshControl.attributedTitle = NSAttributedString(string: "Fetching categories...", attributes: .none)
+        refreshControl.addTarget(self, action: #selector(refreshCategories), for: .valueChanged)
+        categoriesTable.refreshControl = refreshControl
+        
   
         // Add table with categories
         view.addSubview(categoriesTable)
@@ -88,6 +96,7 @@ class CategoriesController: BaseController {
                                bottom: view.safeAreaLayoutGuide.bottomAnchor,
                                leading: view.safeAreaLayoutGuide.leadingAnchor,
                                trailing: view.safeAreaLayoutGuide.trailingAnchor)
+        
     }
     
     private func loadCategories() {
@@ -130,8 +139,14 @@ class CategoriesController: BaseController {
                 for insertRow in insertions {
                     print("DEBUG: We want to insert at the [\(insertRow)] position")
                     let indexPath = IndexPath(row: insertRow, section: 0)
-                    self.categoriesTable.insertRows(at: [indexPath], with: .none)
-
+                    if self.categoriesTable.window == nil {
+                        print("DEBUG: categoriesTables.window is null!")
+//                        self.reloadOnViewDidAppear = true
+                    } else {
+                        self.categoriesTable.beginUpdates()
+                        self.categoriesTable.insertRows(at: [indexPath], with: .none)
+                        self.categoriesTable.endUpdates()
+                    }
                     
                     // TODO: - Fix problem with layout
                     /*
@@ -163,6 +178,13 @@ class CategoriesController: BaseController {
         // try! realm.write {
         //      category.name = "new name"
         // }
+    }
+    
+    // MARK: - Selectors
+    
+    @objc private func refreshCategories() {
+        categoriesTable.reloadData()
+        refreshControl.endRefreshing()
     }
 
 }
@@ -208,7 +230,10 @@ extension CategoriesController: UITableViewDelegate, UITableViewDataSource {
             
             do {
                 try PersistentManager.shared.deleteCategory(category)
+                
+                tableView.beginUpdates()
                 tableView.deleteRows(at: [indexPath], with: .fade)
+                tableView.endUpdates()
                 
 //                try realm.write {
 //                    realm.delete(category)

@@ -22,7 +22,7 @@ class NewEventController: UIViewController {
     
     
     // FOR testing
-//    private let category = Category()
+    private let category = Category()
 
 
     private let textCellIdentifier = "NETextCell"
@@ -176,14 +176,14 @@ class NewEventController: UIViewController {
         
         //let category = Category(name: "YAHOO")
         
-//        do {
-//            try PersistentManager.shared.addCategory(category)
-//            dismiss(animated: true)
-//
-//        } catch {
-//            // TODO: - Show error message
-//            print("DEBUG: ERROR saving context: \(error)")
-//        }
+        do {
+            try PersistentManager.shared.addCategory(category)
+            dismiss(animated: true)
+
+        } catch {
+            // TODO: - Show error message
+            print("DEBUG: ERROR saving context: \(error)")
+        }
         
         
     }
@@ -494,6 +494,6 @@ extension NewEventController: UIPickerViewDataSource, UIPickerViewDelegate {
 extension NewEventController: NETextCellDelegate {
     func textChanged(newText: String) {
         print("DEBUG: Setting name of the category to [\(newText)]")
-//        category.name = newText
+        category.name = newText
     }
 }
