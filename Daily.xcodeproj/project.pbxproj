@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D70620392490842A000F362F /* ECategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70620382490842A000F362F /* ECategory.swift */; };
+		D70620392490842A000F362F /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70620382490842A000F362F /* Category.swift */; };
 		D71F85FF2426417B002D0F4D /* DateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71F85FE2426417B002D0F4D /* DateCell.swift */; };
 		D72DB20024CE49A0000370B7 /* NETextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D72DB1FF24CE49A0000370B7 /* NETextCell.swift */; };
 		D72DB20224CE4A24000370B7 /* NELabelsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D72DB20124CE4A24000370B7 /* NELabelsCell.swift */; };
@@ -23,6 +23,7 @@
 		D77F5DE12425EB6D009A0460 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D77F5DE02425EB6D009A0460 /* Assets.xcassets */; };
 		D77F5DE42425EB6D009A0460 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D77F5DE22425EB6D009A0460 /* LaunchScreen.storyboard */; };
 		D7A23F2125CFAE2400B1AE88 /* BaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7A23F2025CFAE2400B1AE88 /* BaseController.swift */; };
+		D7A23F2725D0216600B1AE88 /* PersistentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7A23F2625D0216600B1AE88 /* PersistentManager.swift */; };
 		D7DB23F0248F5EB500D3C47E /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7DB23EF248F5EB500D3C47E /* Event.swift */; };
 		D7DB23F2248F7B2100D3C47E /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7DB23F1248F7B2100D3C47E /* EventCell.swift */; };
 		D7E928182425F98100EA8362 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E928172425F98100EA8362 /* Extensions.swift */; };
@@ -36,7 +37,7 @@
 /* Begin PBXFileReference section */
 		15101A92A76515D996FD520B /* Pods_Daily.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Daily.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		515D37E6486BABD9EB1C69D3 /* Pods-Daily.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Daily.debug.xcconfig"; path = "Target Support Files/Pods-Daily/Pods-Daily.debug.xcconfig"; sourceTree = "<group>"; };
-		D70620382490842A000F362F /* ECategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECategory.swift; sourceTree = "<group>"; };
+		D70620382490842A000F362F /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		D71F85FE2426417B002D0F4D /* DateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCell.swift; sourceTree = "<group>"; };
 		D72DB1FF24CE49A0000370B7 /* NETextCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NETextCell.swift; sourceTree = "<group>"; };
 		D72DB20124CE4A24000370B7 /* NELabelsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NELabelsCell.swift; sourceTree = "<group>"; };
@@ -54,6 +55,7 @@
 		D77F5DE32425EB6D009A0460 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D77F5DE52425EB6D009A0460 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D7A23F2025CFAE2400B1AE88 /* BaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseController.swift; sourceTree = "<group>"; };
+		D7A23F2625D0216600B1AE88 /* PersistentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentManager.swift; sourceTree = "<group>"; };
 		D7DB23EF248F5EB500D3C47E /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		D7DB23F1248F7B2100D3C47E /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
 		D7E928172425F98100EA8362 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 		D77F5DD62425EB65009A0460 /* Daily */ = {
 			isa = PBXGroup;
 			children = (
+				D7A23F2525D0213100B1AE88 /* Manager */,
 				D7E928162425F93200EA8362 /* Utils */,
 				D77F5DEC2425EC4F009A0460 /* Model */,
 				D77F5DED2425EC5D009A0460 /* View */,
@@ -157,7 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				D7DB23EF248F5EB500D3C47E /* Event.swift */,
-				D70620382490842A000F362F /* ECategory.swift */,
+				D70620382490842A000F362F /* Category.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -170,6 +173,14 @@
 				D72DB20324CE4A97000370B7 /* NewEvent */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		D7A23F2525D0213100B1AE88 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				D7A23F2625D0216600B1AE88 /* PersistentManager.swift */,
+			);
+			path = Manager;
 			sourceTree = "<group>";
 		};
 		D7E928162425F93200EA8362 /* Utils */ = {
@@ -304,6 +315,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7A23F2725D0216600B1AE88 /* PersistentManager.swift in Sources */,
 				D76830E92491B397001200E3 /* CategoryCell.swift in Sources */,
 				D7F6859A248CBF8F00E963AA /* SettingsController.swift in Sources */,
 				D72DB20224CE4A24000370B7 /* NELabelsCell.swift in Sources */,
@@ -312,7 +324,7 @@
 				D77F5DD82425EB65009A0460 /* AppDelegate.swift in Sources */,
 				D7DB23F0248F5EB500D3C47E /* Event.swift in Sources */,
 				D72DB20624CE4C2B000370B7 /* NEToggleCell.swift in Sources */,
-				D70620392490842A000F362F /* ECategory.swift in Sources */,
+				D70620392490842A000F362F /* Category.swift in Sources */,
 				D77F5DDA2425EB65009A0460 /* SceneDelegate.swift in Sources */,
 				D7DB23F2248F7B2100D3C47E /* EventCell.swift in Sources */,
 				D7E928182425F98100EA8362 /* Extensions.swift in Sources */,

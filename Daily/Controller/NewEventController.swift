@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 // TODO: - Set sections
 
@@ -15,12 +16,15 @@ import UIKit
 
 class NewEventController: UIViewController {
 
-    // MARK: - for test
-    private var categories: [ECategory] = [ECategory(name: "Важные покупки", color: .red),
-                                           ECategory(name: "Разное"),
-                                           ECategory(name: "Поздравить", color: .blue)]
-    
     // MARK: - Properties
+ 
+    private var categories: Results<Category>?
+    
+    
+    // FOR testing
+//    private let category = Category()
+
+
     private let textCellIdentifier = "NETextCell"
     private let labelsCellIdentifier = "NELabelsCell"
     private let pickerCellIdentifier = "NEPickerCell"
@@ -163,12 +167,24 @@ class NewEventController: UIViewController {
     
     
     @objc func saveButtonTapped() {
-        print("Save event...")
+        print("DEBUG: Save button is tapped...")
         
 //        UIView.animate(withDuration: 0.3) {
 //            self.alertDate.heightAnchor.constraint(equalToConstant: 0).isActive = true
 //            self.view.layoutIfNeeded()
 //        }
+        
+        //let category = Category(name: "YAHOO")
+        
+//        do {
+//            try PersistentManager.shared.addCategory(category)
+//            dismiss(animated: true)
+//
+//        } catch {
+//            // TODO: - Show error message
+//            print("DEBUG: ERROR saving context: \(error)")
+//        }
+        
         
     }
     
@@ -225,10 +241,14 @@ extension NewEventController: UITableViewDelegate, UITableViewDataSource {
         
 //        let cell: UITableViewCell
         
+        // TODO: - MAKE REFACTORING!
+        
+        
         switch indexPath.section {
         case 0:
             // Create cell for text of new event
             let cell = tableView.dequeueReusableCell(withIdentifier: textCellIdentifier, for: indexPath) as! NETextCell
+            cell.delegate = self
             return cell
             
         case 1:
@@ -457,14 +477,23 @@ extension NewEventController: UIPickerViewDataSource, UIPickerViewDelegate {
     
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return categories.count
+        return categories?.count ?? 0
     }
     
 //    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
 //
 //    }
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return categories[row].name
+        return categories?[row].name
     }
     
+}
+
+
+// MARK: - NETextCellDelegate
+extension NewEventController: NETextCellDelegate {
+    func textChanged(newText: String) {
+        print("DEBUG: Setting name of the category to [\(newText)]")
+//        category.name = newText
+    }
 }

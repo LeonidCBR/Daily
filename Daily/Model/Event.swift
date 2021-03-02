@@ -7,12 +7,23 @@
 //
 
 import Foundation
+import RealmSwift
 
 
-struct Event {
+class Event: Object {
     
-    let text: String
-    let datetime: Date
-    let category: ECategory
+    @objc dynamic var _id: ObjectId = ObjectId.generate()
+    @objc dynamic var text: String = ""
+    var category = LinkingObjects(fromType: Category.self, property: "events")
+//    let datetime: Date
+    //let category: ECategory
     
+    override static func primaryKey() -> String? {
+        return "_id"
+    }
+    
+    convenience init(text: String) {
+        self.init()
+        self.text = text
+    }
 }

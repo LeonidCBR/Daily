@@ -104,7 +104,10 @@ extension UIColor {
         self.init(hexRGBA: hexRGB + "FF")
     }
     
-    
+    /**
+     `toHexString` is a function used to represent UIColor as String.
+     
+    */
     func toHexString() -> String {
         var r:CGFloat = 0
         var g:CGFloat = 0

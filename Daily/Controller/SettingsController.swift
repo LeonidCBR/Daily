@@ -24,7 +24,7 @@ class SettingsController: BaseController {
     private func configureUI() {
         
         headerLabel.text = "Настройки"
-
+        
     }
 
 }

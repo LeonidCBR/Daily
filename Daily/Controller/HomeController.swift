@@ -7,7 +7,9 @@
 //
 
 import UIKit
+import RealmSwift
 import JTAppleCalendar
+
 
 
 class HomeController: BaseController {
@@ -22,13 +24,14 @@ class HomeController: BaseController {
     static private let newEventButtonSize: CGFloat = 30.0 //40.0
     private let headerHeight: CGFloat = 150.0
     
-    private var events: [Event] = [
-        Event(text: "test event 1", datetime: Date(),
-              category: ECategory(name: "test cat", color: UIColor.blue)),
-        Event(text: "посмотреть фильм", datetime: Date(),
-              category: ECategory(name: "test cat 2", color: UIColor.red)),
-        Event(text: "сделать что-нибудь хорошее", datetime: Date(),
-              category: ECategory(name: "test cat", color: UIColor.blue))]
+    private var events: [Event] = []
+//        [
+//        Event(text: "test event 1", datetime: Date(),
+//              category: ECategory(name: "test cat", color: UIColor.blue)),
+//        Event(text: "посмотреть фильм", datetime: Date(),
+//              category: ECategory(name: "test cat 2", color: UIColor.red)),
+//        Event(text: "сделать что-нибудь хорошее", datetime: Date(),
+//              category: ECategory(name: "test cat", color: UIColor.blue))]
     
     private let dateFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -426,7 +429,7 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
 //        let cell = tableView.dequeueReusableCell(withIdentifier: eventCellIdentifier, for: indexPath) as! EventCell
         let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.eventCell, for: indexPath) as! EventCell
         cell.eventText.text = events[indexPath.row].text
-        cell.colorCircle.backgroundColor = events[indexPath.row].category.color
+//        cell.colorCircle.backgroundColor = events[indexPath.row].category.color
         return cell
     }
 

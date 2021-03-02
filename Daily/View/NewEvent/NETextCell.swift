@@ -8,13 +8,20 @@
 
 import UIKit
 
+protocol NETextCellDelegate {
+    func textChanged(newText: String)
+}
+
 class NETextCell: UITableViewCell {
     
     // MARK: - Properties
-    let textEvent: UITextField = {
+    var delegate: NETextCellDelegate?
+    
+    lazy var textEvent: UITextField = {
         let text = UITextField()
         text.textColor = .mainBlue
         text.borderStyle = .roundedRect
+        text.addTarget(self, action: #selector(textChanged), for: .editingDidEnd)
         return text
     }()
     
@@ -26,7 +33,8 @@ class NETextCell: UITableViewCell {
         clipsToBounds = true
 //        contentView.backgroundColor = .green
         
-        addSubview(textEvent)
+        
+        contentView.addSubview(textEvent)
         textEvent.anchor(top: layoutMarginsGuide.topAnchor,
                          bottom: layoutMarginsGuide.bottomAnchor,
                          leading: layoutMarginsGuide.leadingAnchor,
@@ -40,5 +48,12 @@ class NETextCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+    }
+    
+    
+    // MARK: - Methods
+    @objc func textChanged() {
+        print("DEBUG: - selector editingDidEnd is called")
+        delegate?.textChanged(newText: textEvent.text ?? "")
     }
 }
