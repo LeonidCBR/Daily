@@ -12,6 +12,7 @@ import RealmSwift
 class CategoriesController: BaseController {
 
     // MARK: - Properties
+    
 //    private let categoryCellIdentifier = "CategoryCell"
     private let refreshControl = UIRefreshControl()
     private var notificationToken: NotificationToken?
@@ -57,12 +58,21 @@ class CategoriesController: BaseController {
         
     }
     
-//    override func viewDidAppear(_ animated: Bool) {
-//
-//        // TODO: - implement observing
+    /*
+    override func viewDidAppear(_ animated: Bool) {
+
+        // TODO: - implement observing
 //        if shouldReloadData { tableView.realoadData() }
-//
-//    }
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self)
+    }
+    */
     
     deinit {
         notificationToken?.invalidate()
@@ -75,9 +85,14 @@ class CategoriesController: BaseController {
         
         headerLabel.text = "Категории"
         
+        //navigationController?.hidesBarsOnSwipe = true
+        //tabBarController?.hidesBottomBarWhenPushed = true
+        
+
+        
         // Register cells for events
         categoriesTable.register(CategoryCell.self, forCellReuseIdentifier: K.Identifier.categoryCell)
-        categoriesTable.register(NETextCell.self, forCellReuseIdentifier: K.Identifier.textCell)
+        categoriesTable.register(NewCategoryCell.self, forCellReuseIdentifier: K.Identifier.newCategoryCell)
         
         // Set up delegate
         categoriesTable.delegate = self
@@ -198,7 +213,24 @@ class CategoriesController: BaseController {
         categoriesTable.reloadData()
         refreshControl.endRefreshing()
     }
+    
+    /*
+    @objc private func keyboardWillShow(notification: Notification) {
+        print("DEBUG: keyboard will show")
+        //let objSender = notification.object
+        guard let userInfo = notification.userInfo, let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+        let keyboardFrame = keyboardSize.cgRectValue
+        let keyboardHeight = keyboardSize.cgRectValue.height
+        print("Keyboard's height is \(keyboardHeight)")
+        categoriesTable.scrollRectToVisible(keyboardFrame, animated: true)
+    }
 
+    @objc private func keyboardWillHide(notification: Notification) {
+        print("DEBUG: keyboard wll hide")
+    
+    }
+    */
+    
 }
 
 
@@ -214,9 +246,10 @@ extension CategoriesController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        // Add the cell of new category to the bottom
         if indexPath.row == categories?.count {
-            let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.textCell, for: indexPath)
-            (cell as! NETextCell).delegate = self
+            let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.newCategoryCell, for: indexPath)
+            (cell as! NewCategoryCell).delegate = self
             return cell
         }
         
@@ -237,13 +270,13 @@ extension CategoriesController: UITableViewDelegate, UITableViewDataSource {
     }
     
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == categories?.count {
-            return 50.0
-        } else {
-            return tableView.estimatedRowHeight
-        }
-    }
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        if indexPath.row == categories?.count {
+//            return 50.0
+//        } else {
+//            return tableView.estimatedRowHeight
+//        }
+//    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
@@ -284,9 +317,34 @@ extension CategoriesController: UITableViewDelegate, UITableViewDataSource {
 
 
 // MARK: - NETextCellDelegate
-extension CategoriesController: NETextCellDelegate {
+extension CategoriesController: NewCategoryCellDelegate {
     
-    func textChanged(_ textCell: NETextCell, newText: String) {
+    func didBeginEditing(_ textCell: NewCategoryCell, withTextField textField: UITextField) {
+        print("DEBUG: - \(#function)")
+        guard let inputAccessoryViewHeight = textField.inputAccessoryView?.frame.height else {
+            print("DEBUG: inputAccessoryView is nil!")
+            return
+        }
+        
+        print("Height = \(inputAccessoryViewHeight)")
+    }
+    
+    func didEndEditing(_ textCell: NewCategoryCell, withTextField textField: UITextField) {
+        print("DEBUG: - Implement restoring contentOffset.")
+//        textField.resignFirstResponder()
+        if let indexPath = categoriesTable.indexPath(for: textCell) {
+            categoriesTable.scrollToRow(at: indexPath, at: .none, animated: true)
+        }
+    }
+    
+    func textChanged(_ textCell: NewCategoryCell, withTextField textField: UITextField, newText: String) {
+        // try to scroll
+//        var contentOffset = categoriesTable.contentOffset
+//        print("Offset is \(contentOffset.y)")
+//        contentOffset.y += 200
+//        categoriesTable.setContentOffset(contentOffset, animated: true)
+//        return
+        
         guard !newText.isEmpty else { return }
         
         // save category
@@ -301,4 +359,5 @@ extension CategoriesController: NETextCellDelegate {
             print("DEBUG: ERROR saving context: \(error)")
         }
     }
+
 }

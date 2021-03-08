@@ -22,6 +22,7 @@ struct K {
         static let toggleCell = "NEToggleCellIdentifier"
         
         static let categoryCell = "CategoryCellIdentifier"
+        static let newCategoryCell = "NewCategoryCellIdentifier"
     }
     
     struct TabBarItem {

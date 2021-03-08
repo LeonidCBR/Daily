@@ -27,6 +27,7 @@
 		D7DB23F0248F5EB500D3C47E /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7DB23EF248F5EB500D3C47E /* Event.swift */; };
 		D7DB23F2248F7B2100D3C47E /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7DB23F1248F7B2100D3C47E /* EventCell.swift */; };
 		D7E928182425F98100EA8362 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E928172425F98100EA8362 /* Extensions.swift */; };
+		D7E93E4425F3140E00D44471 /* NewCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E93E4325F3140E00D44471 /* NewCategoryCell.swift */; };
 		D7F68596248CB65900E963AA /* NewEventController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F68595248CB65900E963AA /* NewEventController.swift */; };
 		D7F68598248CBF5C00E963AA /* CategoriesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F68597248CBF5C00E963AA /* CategoriesController.swift */; };
 		D7F6859A248CBF8F00E963AA /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F68599248CBF8F00E963AA /* SettingsController.swift */; };
@@ -59,6 +60,7 @@
 		D7DB23EF248F5EB500D3C47E /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		D7DB23F1248F7B2100D3C47E /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
 		D7E928172425F98100EA8362 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		D7E93E4325F3140E00D44471 /* NewCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryCell.swift; sourceTree = "<group>"; };
 		D7F68595248CB65900E963AA /* NewEventController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEventController.swift; sourceTree = "<group>"; };
 		D7F68597248CBF5C00E963AA /* CategoriesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesController.swift; sourceTree = "<group>"; };
 		D7F68599248CBF8F00E963AA /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
@@ -169,7 +171,7 @@
 			isa = PBXGroup;
 			children = (
 				D72DB20424CE4B90000370B7 /* Home */,
-				D76830E82491B397001200E3 /* CategoryCell.swift */,
+				D7E93E4225F313B800D44471 /* Categories */,
 				D72DB20324CE4A97000370B7 /* NewEvent */,
 			);
 			path = View;
@@ -190,6 +192,15 @@
 				D7F9EF5E24CE5A30000CCE35 /* Constants.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		D7E93E4225F313B800D44471 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				D76830E82491B397001200E3 /* CategoryCell.swift */,
+				D7E93E4325F3140E00D44471 /* NewCategoryCell.swift */,
+			);
+			path = Categories;
 			sourceTree = "<group>";
 		};
 		E3EA245001470066806E45E2 /* Pods */ = {
@@ -319,6 +330,7 @@
 				D76830E92491B397001200E3 /* CategoryCell.swift in Sources */,
 				D7F6859A248CBF8F00E963AA /* SettingsController.swift in Sources */,
 				D72DB20224CE4A24000370B7 /* NELabelsCell.swift in Sources */,
+				D7E93E4425F3140E00D44471 /* NewCategoryCell.swift in Sources */,
 				D736106E243218A200C88CDC /* DateHeader.swift in Sources */,
 				D77F5DDC2425EB65009A0460 /* HomeController.swift in Sources */,
 				D77F5DD82425EB65009A0460 /* AppDelegate.swift in Sources */,

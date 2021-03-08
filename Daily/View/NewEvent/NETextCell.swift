@@ -21,6 +21,7 @@ class NETextCell: UITableViewCell {
         let text = UITextField()
         text.textColor = .mainBlue
         text.borderStyle = .roundedRect
+        text.keyboardType = .default
         text.addTarget(self, action: #selector(textChanged), for: .editingDidEnd)
         return text
     }()
@@ -28,22 +29,7 @@ class NETextCell: UITableViewCell {
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        backgroundColor = .mainBlue
-        clipsToBounds = true
-//        contentView.backgroundColor = .green
-        
-        
-        contentView.addSubview(textEvent)
-        textEvent.anchor(top: layoutMarginsGuide.topAnchor,
-                         bottom: layoutMarginsGuide.bottomAnchor,
-                         leading: layoutMarginsGuide.leadingAnchor,
-                         trailing: layoutMarginsGuide.trailingAnchor)
-//        textEvent.anchor(top: topAnchor, paddingTop: 0,
-//                         bottom: bottomAnchor, paddingBottom: 0,
-//                         leading: leadingAnchor, paddingLeading: 0,
-//                         trailing: trailingAnchor, paddingTrailing: 0)
-
+        configureUI()
     }
     
     required init?(coder: NSCoder) {
@@ -52,9 +38,28 @@ class NETextCell: UITableViewCell {
     
     
     // MARK: - Methods
-    func clearTextField() {
-        textEvent.text = ""
+    private func configureUI() {
+        
+        backgroundColor = .mainBlue
+        clipsToBounds = true
+//        contentView.backgroundColor = .green
+        
+        
+        contentView.addSubview(textEvent)
+        textEvent.anchor(top: contentView.layoutMarginsGuide.topAnchor,
+                         bottom: contentView.layoutMarginsGuide.bottomAnchor,
+                         leading: contentView.layoutMarginsGuide.leadingAnchor,
+                         trailing: contentView.layoutMarginsGuide.trailingAnchor)
+//        textEvent.anchor(top: topAnchor, paddingTop: 0,
+//                         bottom: bottomAnchor, paddingBottom: 0,
+//                         leading: leadingAnchor, paddingLeading: 0,
+//                         trailing: trailingAnchor, paddingTrailing: 0)
+
     }
+    
+//    func clearTextField() {
+//        textEvent.text = ""
+//    }
     
     // MARK: - Selectors
     
