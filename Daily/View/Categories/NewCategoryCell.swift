@@ -9,8 +9,8 @@
 import UIKit
 
 protocol NewCategoryCellDelegate {
-    func textChanged(_ textCell: NewCategoryCell, withTextField textField: UITextField, newText: String)
-    func didBeginEditing(_ textCell: NewCategoryCell, withTextField textField: UITextField)
+//    func textChanged(_ textCell: NewCategoryCell, withTextField textField: UITextField, newText: String)
+//    func didBeginEditing(_ textCell: NewCategoryCell, withTextField textField: UITextField)
     func didEndEditing(_ textCell: NewCategoryCell, withTextField textField: UITextField)
 }
 
@@ -25,7 +25,7 @@ class NewCategoryCell: UITableViewCell {
         text.textColor = .mainBlue
         text.borderStyle = .roundedRect
         text.keyboardType = .default
-        text.addTarget(self, action: #selector(textChanged), for: .editingDidEnd)
+//        text.addTarget(self, action: #selector(textChanged), for: .editingDidEnd)
         return text
     }()
     
@@ -78,13 +78,12 @@ class NewCategoryCell: UITableViewCell {
 
     
     // MARK: - Selectors
-    
+    /*
     @objc func textChanged() {
         print("DEBUG: - selector editingDidEnd is called")
         delegate?.textChanged(self, withTextField: self.textCategory, newText: textCategory.text ?? "")
     }
     
-    /*
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -99,14 +98,15 @@ class NewCategoryCell: UITableViewCell {
 }
 
 
+
 // MARK: - UITextFieldDelegate
 extension NewCategoryCell: UITextFieldDelegate {
     
     // Begin editing
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        print("DEBUG: - \(#function)")
-        delegate?.didBeginEditing(self, withTextField: textField)
-    }
+//    func textFieldDidBeginEditing(_ textField: UITextField) {
+//        print("DEBUG: - \(#function)")
+//        delegate?.didBeginEditing(self, withTextField: textField)
+//    }
     
     // End editing
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
@@ -114,3 +114,4 @@ extension NewCategoryCell: UITextFieldDelegate {
         delegate?.didEndEditing(self, withTextField: textField)
     }
 }
+

@@ -9,6 +9,10 @@
 import UIKit
 
 struct K {
+
+    struct HomeController {
+        static let newEventButtonSize: CGFloat = 30.0 //40.0
+    }
     
     struct Identifier {
         static let calendarHeader = "DateHeader"
@@ -32,6 +36,9 @@ struct K {
     }
     
     struct Height {
+        static let headerImage: CGFloat = 150.0
+        
+        // TODO: - Refactor
         static let rowDatePicker: CGFloat = 216.0
         static let rowPickerView: CGFloat = 150.0
         static let rowTextField: CGFloat = 60.0

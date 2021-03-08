@@ -21,8 +21,9 @@ class HomeController: BaseController {
     
     // MARK: - Properties
     
-    static private let newEventButtonSize: CGFloat = 30.0 //40.0
-    private let headerHeight: CGFloat = 150.0
+    //static private let newEventButtonSize: CGFloat = 30.0 //40.0
+    //private let headerHeight: CGFloat = 150.0
+    private let headerPadding: CGFloat = 20.0
     
     private var events: [Event] = []
 //        [
@@ -48,11 +49,13 @@ class HomeController: BaseController {
     
     
     // MARK: - UI Properties
+    
+    private let headerView = UIView()
 
     private let layerForButton: UIImageView = {
         let image = UIImageView()
         image.backgroundColor = .white
-        image.layer.cornerRadius = (newEventButtonSize + 20) / 2 // 20 should replace to "delta"
+        image.layer.cornerRadius = (K.HomeController.newEventButtonSize + 20) / 2 // 20 should replace to "delta"
         return image
     }()
     
@@ -95,13 +98,13 @@ class HomeController: BaseController {
         return calendar
     }()
     
-    private let eventsTable: UITableView = {
-        let tableView = UITableView()
-        tableView.backgroundColor = .mainBlue
-        tableView.separatorStyle = .none
-//        tableView.allowsSelection = false
-        return tableView
-    }()
+//    private let eventsTable: UITableView = {
+//        let tableView = UITableView()
+//        tableView.backgroundColor = .mainBlue
+//        tableView.separatorStyle = .none
+////        tableView.allowsSelection = false
+//        return tableView
+//    }()
     
     
     // MARK: - Lifecycle
@@ -112,11 +115,11 @@ class HomeController: BaseController {
 
         
         // Register cells for events
-        eventsTable.register(EventCell.self, forCellReuseIdentifier: K.Identifier.eventCell)// eventCellIdentifier)
+        tableView.register(EventCell.self, forCellReuseIdentifier: K.Identifier.eventCell)// eventCellIdentifier)
         
         // Set up delegate
-        eventsTable.dataSource = self
-        eventsTable.delegate = self
+//        eventsTable.dataSource = self
+//        eventsTable.delegate = self
         
 //        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addEvent))
         
@@ -196,44 +199,56 @@ class HomeController: BaseController {
     
     private func configureUI() {
         
+        // Add image
+        headerView.addSubview(headerImageView)
+        headerImageView.anchor(top: headerView.topAnchor,
+                               leading: headerView.leadingAnchor,
+                               trailing: headerView.trailingAnchor,
+                               height: K.Height.headerImage)
+        
         // Add calendar
-        view.addSubview(calendarView)
-        calendarView.anchor(top: view.topAnchor,
-                            leading: view.layoutMarginsGuide.leadingAnchor,
-                            trailing: view.layoutMarginsGuide.trailingAnchor)
+        headerView.addSubview(calendarView)
+        calendarView.anchor(top: headerView.topAnchor,
+                            bottom: headerView.bottomAnchor,
+                            leading: headerView.leadingAnchor, paddingLeading: headerPadding, // 20.0
+                            trailing: headerView.trailingAnchor, paddingTrailing: headerPadding)
+//        view.addSubview(calendarView)
+//        calendarView.anchor(top: view.topAnchor,
+//                            leading: view.layoutMarginsGuide.leadingAnchor,
+//                            trailing: view.layoutMarginsGuide.trailingAnchor)
         
         // calculate height of calendarView
         // formula: <width> / <count-of-days-in-line> * <count-of-days-in-column> + <header-height>
-        let countOfDaysInColumn: CGFloat = 6
-        let countOfDaysInLine: CGFloat = 7
-        NSLayoutConstraint(item: calendarView,
-                       attribute: .height,
-                       relatedBy: .equal,
-                       toItem: view.layoutMarginsGuide,
-                       attribute: .width,
-                       multiplier: countOfDaysInColumn / countOfDaysInLine,
-                       constant: CGFloat(headerHeight)).isActive = true
+//        let countOfDaysInColumn: CGFloat = 6
+//        let countOfDaysInLine: CGFloat = 7
+//        NSLayoutConstraint(item: calendarView,
+//                       attribute: .height,
+//                       relatedBy: .equal,
+//                       toItem: view.layoutMarginsGuide,
+//                       attribute: .width,
+//                       multiplier: countOfDaysInColumn / countOfDaysInLine,
+//                       constant: CGFloat(headerHeight)).isActive = true
         
         // Add layer under the "new event" button
-        view.addSubview(layerForButton)
-        layerForButton.anchor(top: view.topAnchor, paddingTop: 50, //45
-                              trailing: view.trailingAnchor, paddingTrailing: 10,
-                              width: HomeController.newEventButtonSize + 20,
-                              height: HomeController.newEventButtonSize + 20)
-        
-        // Add new event button
-        view.addSubview(newEventButton)
-        newEventButton.anchor(top: view.topAnchor, paddingTop: 60, //55
-                              trailing: view.trailingAnchor, paddingTrailing: 20,
-                              width: HomeController.newEventButtonSize,
-                              height: HomeController.newEventButtonSize)
-        
-        // Add table with events
-        view.addSubview(eventsTable)
-        eventsTable.anchor(top: calendarView.bottomAnchor,
-                           bottom: view.layoutMarginsGuide.bottomAnchor,
-                           leading: view.layoutMarginsGuide.leadingAnchor,
-                           trailing: view.layoutMarginsGuide.trailingAnchor)
+//        view.addSubview(layerForButton)
+//        layerForButton.anchor(top: view.topAnchor, paddingTop: 50, //45
+//                              trailing: view.trailingAnchor, paddingTrailing: 10,
+//                              width: HomeController.newEventButtonSize + 20,
+//                              height: HomeController.newEventButtonSize + 20)
+//        
+//        // Add new event button
+//        view.addSubview(newEventButton)
+//        newEventButton.anchor(top: view.topAnchor, paddingTop: 60, //55
+//                              trailing: view.trailingAnchor, paddingTrailing: 20,
+//                              width: HomeController.newEventButtonSize,
+//                              height: HomeController.newEventButtonSize)
+//
+//        // Add table with events
+//        view.addSubview(eventsTable)
+//        eventsTable.anchor(top: calendarView.bottomAnchor,
+//                           bottom: view.layoutMarginsGuide.bottomAnchor,
+//                           leading: view.layoutMarginsGuide.leadingAnchor,
+//                           trailing: view.layoutMarginsGuide.trailingAnchor)
         
     }
 
@@ -248,6 +263,53 @@ class HomeController: BaseController {
         print("Selected date is \(dateFormatter.string(from: date))")
     }
     
+    
+    // MARK: - Table view data source
+    
+    // numberOfSections
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    // numberOfRowsInSection
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        events.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.eventCell, for: indexPath) as! EventCell
+        cell.eventText.text = events[indexPath.row].text
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        //return calendarView
+        return headerView
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        
+        let countOfDaysInColumn: CGFloat = 6
+        let countOfDaysInLine: CGFloat = 7
+//        let width = view.layoutMarginsGuide.layoutFrame.width
+        
+        // Does not work. Frame is zero.
+//        let width = calendarView.frame.width
+        let width = view.frame.width - headerPadding * 2
+        
+        
+        return countOfDaysInColumn / countOfDaysInLine * width + K.Height.headerImage
+//        return 300
+        
+
+//                NSLayoutConstraint(item: calendarView,
+//                               attribute: .height,
+//                               relatedBy: .equal,
+//                               toItem: view.layoutMarginsGuide,
+//                               attribute: .width,
+//                               multiplier: countOfDaysInColumn / countOfDaysInLine,
+//                               constant: CGFloat(headerHeight)).isActive = true
+    }
 }
 
 
@@ -409,15 +471,14 @@ extension HomeController: JTACMonthViewDelegate {
 
     func calendarSizeForMonths(_ calendar: JTACMonthView?) -> MonthSize? {
         // set height for header with month
-        return MonthSize(defaultSize: headerHeight)
+        return MonthSize(defaultSize: K.Height.headerImage)
     }
     
     
 }
 
 
-// MARK: - UITableViewDelegate, UITableViewDataSource
-
+/*
 extension HomeController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -447,4 +508,4 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
         }
     }
 }
-
+*/

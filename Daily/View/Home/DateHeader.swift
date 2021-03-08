@@ -12,6 +12,8 @@ import JTAppleCalendar
 class DateHeader: JTACMonthReusableView {
 
     // MARK: - Properties
+//    private let imageView = UIImageView(image: .init(imageLiteralResourceName: "sky-640"))
+    
     let monthTitle: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Verdana-Bold", size: 25.0)
@@ -39,6 +41,9 @@ class DateHeader: JTACMonthReusableView {
         super.init(frame: frame)
         
         backgroundColor = .clear
+        
+//        addSubview(imageView)
+//        imageView.anchor(top: topAnchor, bottom: bottomAnchor, leading: leadingAnchor, trailing: trailingAnchor)
         
         addSubview(monthTitle)
 //        monthTitle.anchor(centerX: centerXAnchor, centerY: centerYAnchor)

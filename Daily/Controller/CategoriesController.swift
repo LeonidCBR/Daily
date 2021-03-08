@@ -14,7 +14,7 @@ class CategoriesController: BaseController {
     // MARK: - Properties
     
 //    private let categoryCellIdentifier = "CategoryCell"
-    private let refreshControl = UIRefreshControl()
+//    private let refreshControl = UIRefreshControl()
     private var notificationToken: NotificationToken?
     
     private var categories: Results<Category>?
@@ -39,12 +39,12 @@ class CategoriesController: BaseController {
     */
     
     // MARK: - UI Properties
-    private let categoriesTable: UITableView = {
-        let tableView = UITableView()
-        tableView.backgroundColor = .mainBlue
-        tableView.separatorStyle = .none
-        return tableView
-    }()
+//    private let categoriesTable: UITableView = {
+//        let tableView = UITableView()
+//        tableView.backgroundColor = .mainBlue
+//        tableView.separatorStyle = .none
+//        return tableView
+//    }()
     
     
     // MARK: - Lifecycle
@@ -83,35 +83,37 @@ class CategoriesController: BaseController {
     
     private func configureUI() {
         
-        headerLabel.text = "Категории"
+//        headerLabel.text = "Категории"
         
         //navigationController?.hidesBarsOnSwipe = true
         //tabBarController?.hidesBottomBarWhenPushed = true
-        
+        tableView.allowsSelection = false
 
         
         // Register cells for events
-        categoriesTable.register(CategoryCell.self, forCellReuseIdentifier: K.Identifier.categoryCell)
-        categoriesTable.register(NewCategoryCell.self, forCellReuseIdentifier: K.Identifier.newCategoryCell)
+        tableView.register(CategoryCell.self, forCellReuseIdentifier: K.Identifier.categoryCell)
+        tableView.register(NewCategoryCell.self, forCellReuseIdentifier: K.Identifier.newCategoryCell)
         
         // Set up delegate
-        categoriesTable.delegate = self
-        categoriesTable.dataSource = self
+//        categoriesTable.delegate = self
+//        categoriesTable.dataSource = self
         
-        refreshControl.tintColor = UIColor(red:0.25, green:0.72, blue:0.85, alpha:1.0)
-        refreshControl.attributedTitle = NSAttributedString(string: "Fetching categories...", attributes: .none)
-        refreshControl.addTarget(self, action: #selector(refreshCategories), for: .valueChanged)
-        categoriesTable.refreshControl = refreshControl
+        // Setup refresh control
+        refreshControl = UIRefreshControl()
+        refreshControl?.tintColor = UIColor(red:0.25, green:0.72, blue:0.85, alpha:1.0)
+        refreshControl?.attributedTitle = NSAttributedString(string: "Fetching categories...", attributes: .none)
+        refreshControl?.addTarget(self, action: #selector(refreshCategories), for: .valueChanged)
+
         
   
         // Add table with categories
-        view.addSubview(categoriesTable)
+//        view.addSubview(categoriesTable)
         // safeAreaLayoutGuide
         // layoutMarginsGuide
-        categoriesTable.anchor(top: topImage.bottomAnchor,
-                               bottom: view.safeAreaLayoutGuide.bottomAnchor,
-                               leading: view.safeAreaLayoutGuide.leadingAnchor,
-                               trailing: view.safeAreaLayoutGuide.trailingAnchor)
+//        categoriesTable.anchor(top: topImage.bottomAnchor,
+//                               bottom: view.safeAreaLayoutGuide.bottomAnchor,
+//                               leading: view.safeAreaLayoutGuide.leadingAnchor,
+//                               trailing: view.safeAreaLayoutGuide.trailingAnchor)
         
         // Hide keyboard when tap out of TextFields
         let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
@@ -141,7 +143,7 @@ class CategoriesController: BaseController {
             case .initial: //break
                 // Results are now populated and can be accessed without blocking the UI
                 print("DEBUG: - let's populate tables view")
-                self.categoriesTable.reloadData()
+                self.tableView.reloadData()
                 
             case .update(_, deletions: let deletions, insertions: let insertions, modifications: let modifications):
                 
@@ -153,6 +155,11 @@ class CategoriesController: BaseController {
                 print("DEBUG: Deleted indices: ", deletions)
                 print("DEBUG: Inserted indices: ", insertions)
                 print("DEBUG: Modified modifications: ", modifications)
+                
+                
+                // TODO: - Implenent modifications
+                
+                
                 //self.categoriesTable.reloadData()
 //                DEBUG: Deleted indices:  []
 //                DEBUG: Inserted indices:  [0]
@@ -166,13 +173,15 @@ class CategoriesController: BaseController {
                 for insertRow in insertions {
                     print("DEBUG: We want to insert at the [\(insertRow)] position")
                     let indexPath = IndexPath(row: insertRow, section: 0)
-                    if self.categoriesTable.window == nil {
+                    
+                    //if self.categoriesTable.window == nil
+                    if self.view.window == nil {
                         print("DEBUG: categoriesTables.window is null!")
 //                        self.reloadOnViewDidAppear = true
                     } else {
-                        self.categoriesTable.beginUpdates()
-                        self.categoriesTable.insertRows(at: [indexPath], with: .none)
-                        self.categoriesTable.endUpdates()
+                        self.tableView.beginUpdates()
+                        self.tableView.insertRows(at: [indexPath], with: .none)
+                        self.tableView.endUpdates()
                     }
                     
                     // TODO: - Fix problem with layout
@@ -210,8 +219,8 @@ class CategoriesController: BaseController {
     // MARK: - Selectors
     
     @objc private func refreshCategories() {
-        categoriesTable.reloadData()
-        refreshControl.endRefreshing()
+        tableView.reloadData()
+        refreshControl?.endRefreshing()
     }
     
     /*
@@ -231,11 +240,66 @@ class CategoriesController: BaseController {
     }
     */
     
+    
+    // MARK: - Table view data source
+    
+    // numberOfSections
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    // numberOfRowsInSection
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // Number of row equals number of categories plus one for text field cell
+        return (categories?.count ?? 0) + 1
+    }
+    
+    // cellForRowAt
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        // Add the cell of new category to the bottom of the list
+        if indexPath.row == categories?.count {
+            let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.newCategoryCell, for: indexPath)
+            (cell as! NewCategoryCell).delegate = self
+            return cell
+        }
+        
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.categoryCell, for: indexPath) as! CategoryCell
+        
+        if let category = categories?[indexPath.row] {
+            
+            // TODO: - write func setText, setColor
+            
+            cell.categoryText.text = category.name
+            cell.colorCircle.backgroundColor = category.color
+        }
+        return cell
+    }
+    
+    // commit
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
+        if editingStyle == .delete {
+            guard let category = categories?[indexPath.row] else { return }
+            do {
+                try PersistentManager.shared.deleteCategory(category)
+                
+                tableView.beginUpdates()
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                tableView.endUpdates()
+            } catch {
+                // TODO: - Show message
+                print("DEBUG: - ERROR deleting category. \(error)")
+            }
+        }
+    }
+    
 }
 
 
-// MARK: - UITableViewDelegate, UITableViewDataSource
 
+/*
 extension CategoriesController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -314,11 +378,28 @@ extension CategoriesController: UITableViewDelegate, UITableViewDataSource {
     }
     
 }
-
+*/
 
 // MARK: - NETextCellDelegate
 extension CategoriesController: NewCategoryCellDelegate {
     
+    func didEndEditing(_ textCell: NewCategoryCell, withTextField textField: UITextField) {
+        guard let newText = textField.text, !newText.isEmpty else { return }
+        
+        // Save category
+        print("DEBUG: Save category \(newText)")
+        do {
+            let newCategory = Category(name: newText)
+            try PersistentManager.shared.addCategory(newCategory)
+            textCell.clearTextField()
+
+        } catch {
+            // TODO: - Show error message
+            print("DEBUG: ERROR saving context: \(error)")
+        }
+    }
+    
+    /*
     func didBeginEditing(_ textCell: NewCategoryCell, withTextField textField: UITextField) {
         print("DEBUG: - \(#function)")
         guard let inputAccessoryViewHeight = textField.inputAccessoryView?.frame.height else {
@@ -329,14 +410,7 @@ extension CategoriesController: NewCategoryCellDelegate {
         print("Height = \(inputAccessoryViewHeight)")
     }
     
-    func didEndEditing(_ textCell: NewCategoryCell, withTextField textField: UITextField) {
-        print("DEBUG: - Implement restoring contentOffset.")
-//        textField.resignFirstResponder()
-        if let indexPath = categoriesTable.indexPath(for: textCell) {
-            categoriesTable.scrollToRow(at: indexPath, at: .none, animated: true)
-        }
-    }
-    
+
     func textChanged(_ textCell: NewCategoryCell, withTextField textField: UITextField, newText: String) {
         // try to scroll
 //        var contentOffset = categoriesTable.contentOffset
@@ -359,5 +433,5 @@ extension CategoriesController: NewCategoryCellDelegate {
             print("DEBUG: ERROR saving context: \(error)")
         }
     }
-
+*/
 }

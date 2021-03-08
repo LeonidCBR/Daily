@@ -13,6 +13,9 @@ class SettingsController: BaseController {
     // MARK: - Properties
 
     
+    // TODO: - Add capability to change image
+    
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +26,7 @@ class SettingsController: BaseController {
     // MARK: - Methods
     private func configureUI() {
         
-        headerLabel.text = "Настройки"
+        //headerLabel.text = "Настройки"
         
     }
 
