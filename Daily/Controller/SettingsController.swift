@@ -11,10 +11,7 @@ import UIKit
 class SettingsController: BaseController {
 
     // MARK: - Properties
-
-    
-    // TODO: - Add capability to change image
-    
+    private let imagePicker = UIImagePickerController()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -30,6 +27,9 @@ class SettingsController: BaseController {
         tableView.register(MenuOptionCell.self, forCellReuseIdentifier: K.Identifier.menuOptionCell)
         tableView.separatorStyle = .none
         tableView.isScrollEnabled = false
+        
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -49,13 +49,25 @@ class SettingsController: BaseController {
         let menuOption = MenuOption(rawValue: indexPath.row)
         switch menuOption {
         case .Image:
-            let vc = UIViewController()
-            vc.view.backgroundColor = .systemPink
-            present(vc, animated: true, completion: nil)
+            present(imagePicker, animated: true, completion: nil)
         
         case .none:
             print("DEBUG: Wrong raw value of the indexpath!")
         }
     }
 
+}
+
+
+// MARK: - UIImagePickerControllerDelegate & UINavigationControllerDelegate
+extension SettingsController: UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        if let image = info[.editedImage] as? UIImage {
+            headerImageView.image = image
+        }
+        
+        dismiss(animated: true, completion: nil)
+    }
 }
