@@ -130,3 +130,9 @@ extension UIColor {
     static let mainBlue = UIColor.rgb(red: 29, green: 161, blue: 242)
 }
 
+
+// MARK: - Notification.Name
+
+extension Notification.Name {
+    static let DAHeaderImageDidChange = Notification.Name(rawValue: "DAHeaderImageDidChange")
+}

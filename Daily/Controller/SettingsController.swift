@@ -65,7 +65,7 @@ extension SettingsController: UIImagePickerControllerDelegate & UINavigationCont
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
         if let image = info[.editedImage] as? UIImage {
-            headerImageView.image = image
+            SettingsManager.shared.mainImage = image
         }
         
         dismiss(animated: true, completion: nil)

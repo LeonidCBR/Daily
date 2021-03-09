@@ -17,7 +17,7 @@ class BaseController: UITableViewController {
     // MARK: - Properties
     
     let headerImageView: UIImageView = {
-        let iv = UIImageView(image: .init(imageLiteralResourceName: "sky-640"))
+        let iv = UIImageView()
         iv.clipsToBounds = true
         iv.contentMode = .scaleAspectFill
         return iv
@@ -38,12 +38,24 @@ class BaseController: UITableViewController {
         super.viewDidLoad()
         configureUI()
         
+        // Set image
+        headerImageView.image = SettingsManager.shared.mainImage
+        // Add observer of changing image
+        NotificationCenter.default.addObserver(self, selector: #selector(handleChangeImage), name: .DAHeaderImageDidChange, object: nil)
+        
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    // MARK: - Methods
     
     private func configureUI() {
         view.backgroundColor = .mainBlue
@@ -52,6 +64,12 @@ class BaseController: UITableViewController {
         headerImageView.addSubview(headerLabel)
         headerLabel.anchor(centerX: headerImageView.centerXAnchor,
                            centerY: headerImageView.centerYAnchor)
+    }
+    
+    
+    // MARK: - Selectors
+    @objc private func handleChangeImage() {
+        headerImageView.image = SettingsManager.shared.mainImage
     }
 
     // MARK: - Table view data source
