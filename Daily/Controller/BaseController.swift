@@ -23,21 +23,35 @@ class BaseController: UITableViewController {
         return iv
     }()
     
+    let headerLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont(name: "Verdana-Bold", size: 25.0)
+        label.textAlignment = .center
+        return label
+    }()
+    
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .mainBlue
-//        additionalSafeAreaInsets = .zero
-        tableView.contentInset = .zero
-        
+        configureUI()
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+    }
+    
+    private func configureUI() {
+        view.backgroundColor = .mainBlue
+        tableView.contentInsetAdjustmentBehavior = .never
+        
+        headerImageView.addSubview(headerLabel)
+        headerLabel.anchor(centerX: headerImageView.centerXAnchor,
+                           centerY: headerImageView.centerYAnchor)
     }
 
     // MARK: - Table view data source
@@ -50,10 +64,9 @@ class BaseController: UITableViewController {
         return K.Height.headerImage
     }
 
-//    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-//        return 0
-//    }
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
 
 //    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows

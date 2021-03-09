@@ -27,6 +27,8 @@ struct K {
         
         static let categoryCell = "CategoryCellIdentifier"
         static let newCategoryCell = "NewCategoryCellIdentifier"
+        
+        static let menuOptionCell = "MenuOptionCell Identifier"
     }
     
     struct TabBarItem {

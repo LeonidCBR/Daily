@@ -23,6 +23,9 @@ struct PersistentManager {
     
     func fetchCategories() -> Results<Category> {
         print("DEBUG: \(#function) Fetching categories...")
+        
+        // TODO: - fetch in the background mode
+        
         return realm.objects(Category.self)
     }
     

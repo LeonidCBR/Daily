@@ -83,7 +83,7 @@ class CategoriesController: BaseController {
     
     private func configureUI() {
         
-//        headerLabel.text = "Категории"
+        headerLabel.text = "Категории"
         
         //navigationController?.hidesBarsOnSwipe = true
         //tabBarController?.hidesBottomBarWhenPushed = true
@@ -131,9 +131,6 @@ class CategoriesController: BaseController {
     private func loadCategories() {
         print("DEBUG: loading categories...")
         
-        // TODO: - find out why it does not refresh!!!
-        
-//        categories = realm.objects(Category.self)
         categories = PersistentManager.shared.fetchCategories()
         
         // Retain notificationToken as long as you want to observe
@@ -243,11 +240,6 @@ class CategoriesController: BaseController {
     
     // MARK: - Table view data source
     
-    // numberOfSections
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
     // numberOfRowsInSection
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Number of row equals number of categories plus one for text field cell
@@ -258,7 +250,7 @@ class CategoriesController: BaseController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Add the cell of new category to the bottom of the list
-        if indexPath.row == categories?.count {
+        if indexPath.row == (categories?.count ?? 0) {
             let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.newCategoryCell, for: indexPath)
             (cell as! NewCategoryCell).delegate = self
             return cell

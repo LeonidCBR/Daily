@@ -266,11 +266,6 @@ class HomeController: BaseController {
     
     // MARK: - Table view data source
     
-    // numberOfSections
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
     // numberOfRowsInSection
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         events.count
