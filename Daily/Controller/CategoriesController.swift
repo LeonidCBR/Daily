@@ -272,6 +272,10 @@ class CategoriesController: BaseController {
     // commit
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
+        // Avoid deleting cell with TextFeild
+        // TODO: - Consider to add a tap to the cell view and discard it
+        guard indexPath.row < (categories?.count ?? 0) else { return }
+        
         if editingStyle == .delete {
             guard let category = categories?[indexPath.row] else { return }
             do {

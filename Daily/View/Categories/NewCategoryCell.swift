@@ -29,10 +29,13 @@ class NewCategoryCell: UITableViewCell {
         return text
     }()
     
-    let slider: UISlider = {
+    lazy var colorSlider: UISlider = {
         let slider = UISlider()
-        slider.minimumValue = 0
-        slider.maximumValue = 100
+        slider.minimumValue = 0.0
+        slider.maximumValue = 1.0
+//        slider.value = 0.3
+        slider.thumbTintColor = .black
+        slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
         return slider
     }()
     
@@ -65,11 +68,14 @@ class NewCategoryCell: UITableViewCell {
                             trailing: contentView.layoutMarginsGuide.trailingAnchor,
                             height: 35.0)
         
-        contentView.addSubview(slider)
-        slider.anchor(top: textCategory.bottomAnchor, paddingTop: 15.0,
+        contentView.addSubview(colorSlider)
+        colorSlider.anchor(top: textCategory.bottomAnchor, paddingTop: 15.0,
                       bottom: contentView.layoutMarginsGuide.bottomAnchor,
                       leading: contentView.layoutMarginsGuide.leadingAnchor,
                       trailing: contentView.layoutMarginsGuide.trailingAnchor)
+        
+        colorSlider.setValue(0.45, animated: false)
+        sliderValueChanged()
     }
     
     func clearTextField() {
@@ -78,6 +84,16 @@ class NewCategoryCell: UITableViewCell {
 
     
     // MARK: - Selectors
+    
+    @objc func sliderValueChanged() {
+        
+        let colorValue = CGFloat(colorSlider.value)
+        let color = UIColor(hue: colorValue, saturation: 1.0, brightness: 1.0, alpha: 1.0)
+        
+        colorSlider.minimumTrackTintColor = color
+        colorSlider.thumbTintColor = color
+    }
+
     /*
     @objc func textChanged() {
         print("DEBUG: - selector editingDidEnd is called")
