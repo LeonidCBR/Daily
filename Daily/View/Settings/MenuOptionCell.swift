@@ -22,7 +22,7 @@ class MenuOptionCell: UITableViewCell {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.clipsToBounds = true
-        iv.tintColor = .lightGray
+        iv.tintColor = .white
         return iv
     }()
     

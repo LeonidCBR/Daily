@@ -52,15 +52,15 @@ class HomeController: BaseController {
     
     private let headerView = UIView()
 
-    private let layerForButton: UIImageView = {
-        let image = UIImageView()
-        image.backgroundColor = .white
-        image.layer.cornerRadius = (K.HomeController.newEventButtonSize + 20) / 2 // 20 should replace to "delta"
-        return image
-    }()
+//    private let layerForButton: UIImageView = {
+//        let image = UIImageView()
+//        image.backgroundColor = .white
+//        image.layer.cornerRadius = (K.HomeController.newEventButtonSize + 20) / 2 // 20 should replace to "delta"
+//        return image
+//    }()
     
     // Plus button
-    private let newEventButton: UIButton = {
+    lazy var newEventButton: UIButton = {
         let button = UIButton()
         /*
         let img = UIImageView(image: UIImage.init(systemName: "plus.circle")?.withRenderingMode(.alwaysOriginal))
@@ -69,13 +69,18 @@ class HomeController: BaseController {
 //        button.setImage(UIImage.init(systemName: "plus.circle"), for: .normal)
         
         button.setBackgroundImage(UIImage.init(systemName: "calendar.badge.plus"), for: .normal)
-        button.tintColor = .mainBlue
+        
+        
+        button.backgroundColor = .clear
+        button.tintColor = .white
+//        button.backgroundColor = .white
+//        button.tintColor = .mainBlue
         
         // v1
 //        button.backgroundColor = .clear
 //        button.layer.borderColor = UIColor.clear.cgColor
         // v2
-        button.backgroundColor = .white
+        
         
         /* last version
         button.contentMode = .scaleAspectFit
@@ -85,7 +90,7 @@ class HomeController: BaseController {
         button.layer.cornerRadius = newEventButtonSize / 2 //20.0
         */
         
-        button.addTarget(self, action: #selector(addEvent), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleNewEventButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -205,13 +210,21 @@ class HomeController: BaseController {
                                leading: headerView.leadingAnchor,
                                trailing: headerView.trailingAnchor,
                                height: K.Height.headerImage)
-        
+
         // Add calendar
         headerView.addSubview(calendarView)
         calendarView.anchor(top: headerView.topAnchor,
                             bottom: headerView.bottomAnchor,
                             leading: headerView.leadingAnchor, paddingLeading: headerPadding, // 20.0
                             trailing: headerView.trailingAnchor, paddingTrailing: headerPadding)
+        
+        // Add new event button
+        headerView.addSubview(newEventButton)
+        newEventButton.anchor(top: headerView.topAnchor, paddingTop: 60, //55
+                              trailing: headerView.trailingAnchor, paddingTrailing: 20,
+                              width: K.HomeController.newEventButtonSize,
+                              height: K.HomeController.newEventButtonSize)
+        
 //        view.addSubview(calendarView)
 //        calendarView.anchor(top: view.topAnchor,
 //                            leading: view.layoutMarginsGuide.leadingAnchor,
@@ -253,7 +266,7 @@ class HomeController: BaseController {
     }
 
     
-    @objc func addEvent() {
+    @objc func handleNewEventButtonTapped() {
         present(NewEventController(), animated: true, completion: nil)
     }
     
@@ -279,11 +292,13 @@ class HomeController: BaseController {
         return cell
     }
     
+    // Set header view
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         //return calendarView
         return headerView
     }
     
+    // Set height for header view
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         let countOfDaysInColumn: CGFloat = 6
