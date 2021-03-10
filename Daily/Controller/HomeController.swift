@@ -14,11 +14,6 @@ import JTAppleCalendar
 
 class HomeController: BaseController {
     
-    
-    // MARK: - Create constants!!!
-    
-       
-    
     // MARK: - Properties
     
     //static private let newEventButtonSize: CGFloat = 30.0 //40.0
@@ -26,6 +21,7 @@ class HomeController: BaseController {
     private let headerPadding: CGFloat = 20.0
     
     private var events: Results<Event>?
+    private var notificationToken: NotificationToken?
 //        [
 //        Event(text: "test event 1", datetime: Date(),
 //              category: ECategory(name: "test cat", color: UIColor.blue)),
@@ -132,6 +128,7 @@ class HomeController: BaseController {
         
         configureUI()
         
+        loadEvents()
     }
 
     
@@ -173,6 +170,10 @@ class HomeController: BaseController {
         */
         //newEventButton.bounds.size.width += 40
         //print("Month label width = \(monthLabel.frame.width) and height = \(monthLabel.frame.height)")
+    }
+    
+    deinit {
+        notificationToken?.invalidate()
     }
     
     
@@ -266,8 +267,47 @@ class HomeController: BaseController {
     }
 
     
-    @objc func handleNewEventButtonTapped() {
-        present(NewEventController(), animated: true, completion: nil)
+    private func loadEvents() {
+        print("DEBUG: loading events...")
+        
+        events = PersistentManager.shared.fetchEvents()
+        
+        // Retain notificationToken as long as you want to observe
+        // let notificationToken = categories?.observe { ...
+        notificationToken = events?.observe { (changes) in
+            switch (changes) {
+            case .initial:
+                // Results are now populated and can be accessed without blocking the UI
+                print("DEBUG: - let's populate tables view")
+                self.tableView.reloadData()
+                
+            case .update(_, deletions: let deletions, insertions: let insertions, modifications: let modifications):
+                
+                // Query results have changed.
+                print("DEBUG: Deleted indices: ", deletions)
+                print("DEBUG: Inserted indices: ", insertions)
+                print("DEBUG: Modified modifications: ", modifications)
+
+                for insertRow in insertions {
+                    print("DEBUG: We want to insert at the [\(insertRow)] position")
+                    let indexPath = IndexPath(row: insertRow, section: 0)
+                    
+                    if self.view.window == nil {
+                        print("DEBUG: window is null!")
+//                        self.reloadOnViewDidAppear = true
+                    } else {
+                        self.tableView.beginUpdates()
+                        self.tableView.insertRows(at: [indexPath], with: .none)
+                        self.tableView.endUpdates()
+                    }
+                }
+                
+            case .error(let error):
+                // An error occurred while opening the Realm file on the background worker thread
+                // TODO: - Show message
+                fatalError("\(error)")
+            }
+        }
     }
     
     
@@ -277,13 +317,21 @@ class HomeController: BaseController {
     }
     
     
+    // MARK: - Selectors
+    
+    @objc func handleNewEventButtonTapped() {
+        present(NewEventController(), animated: true, completion: nil)
+    }
+    
+    
     // MARK: - Table view data source
     
-    // numberOfRowsInSection
+    // Number of rows in section
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         events?.count ?? 0
     }
     
+    // Cell for row at
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.eventCell, for: indexPath) as! EventCell
         if let event = events?[indexPath.row] {
@@ -321,6 +369,10 @@ class HomeController: BaseController {
 //                               attribute: .width,
 //                               multiplier: countOfDaysInColumn / countOfDaysInLine,
 //                               constant: CGFloat(headerHeight)).isActive = true
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 

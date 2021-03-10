@@ -14,6 +14,8 @@ class Event: Object {
     
     @objc dynamic var _id: ObjectId = ObjectId.generate()
     @objc dynamic var text: String = ""
+    
+    // let ?
     var category = LinkingObjects(fromType: Category.self, property: "events")
 //    let datetime: Date
     //let category: ECategory

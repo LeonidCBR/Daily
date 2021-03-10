@@ -21,25 +21,43 @@ struct PersistentManager {
     
     // MARK: - Methods
     
+    /**
+     Work with categories
+     */
+    
     func fetchCategories() -> Results<Category> {
-        print("DEBUG: \(#function) Fetching categories...")
-        
-        // TODO: - fetch in the background mode
-        
         return realm.objects(Category.self)
     }
     
     func addCategory(_ category: Category) throws {
         try realm.write() {
             realm.add(category)
-            print("DEBUG: \(#function) Category is added.")
         }
     }
     
     func deleteCategory(_ category: Category) throws {
         try realm.write {
             realm.delete(category)
-            print("DEBUG: \(#function) Category is deleted.")
+        }
+    }
+    
+    /**
+     Work with Events
+     */
+    
+    func fetchEvents() -> Results<Event> {
+        return realm.objects(Event.self)
+    }
+    
+    func addEvent(_ event: Event) throws {
+        try realm.write() {
+            realm.add(event)
+        }
+    }
+    
+    func deleteEvent(_ event: Event) throws {
+        try realm.write {
+            realm.delete(event)
         }
     }
 }

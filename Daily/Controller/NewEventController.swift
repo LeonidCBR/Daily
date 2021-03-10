@@ -14,15 +14,18 @@ import RealmSwift
 // read "Creating self-sizing table view cells"
 // read contentView
 
+
+
+// TODO: - inherit from UITableView!!!
+
+
 class NewEventController: UIViewController {
 
     // MARK: - Properties
  
     private var categories: Results<Category>?
     
-    
-    // FOR testing
-    private let category = Category()
+    private let event = Event()
 
 /*
     private let textCellIdentifier = "NETextCell"
@@ -110,19 +113,7 @@ class NewEventController: UIViewController {
         mainTable.dataSource = self
         
         configureUI()
-        
-        // Hide keyboard when tap out of TextFields
-        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
-        /*
-         There could be issues if you are dealing with tableviews and adding this tap gesture, selecting the rows, didSelectRowAtIndex path could not be fired until pressed long.
-         Solution:
-         
-            tap.cancelsTouchesInView = false
-         
-         */
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-        
+        configureTap()
     }
     
 //    override func viewDidAppear(_ animated: Bool) {
@@ -160,6 +151,20 @@ class NewEventController: UIViewController {
 
     }
     
+    private func configureTap() {
+        // Hide keyboard when tap out of TextFields
+        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
+        /*
+         There could be issues if you are dealing with tableviews and adding this tap gesture, selecting the rows, didSelectRowAtIndex path could not be fired until pressed long.
+         Solution:
+         
+            tap.cancelsTouchesInView = false
+         
+         */
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
     
     // MARK: - Selectors
     @objc func cancelButtonTapped() {
@@ -178,7 +183,7 @@ class NewEventController: UIViewController {
         //let category = Category(name: "YAHOO")
         
         do {
-            try PersistentManager.shared.addCategory(category)
+            try PersistentManager.shared.addEvent(event)
             dismiss(animated: true)
 
         } catch {
@@ -217,6 +222,12 @@ extension NewEventController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        
+        
+        // TODO: - MAKE REFACTORING!
+        
+        
         switch section {
         case 0:
             // Text of the new event
@@ -495,6 +506,6 @@ extension NewEventController: UIPickerViewDataSource, UIPickerViewDelegate {
 extension NewEventController: NETextCellDelegate {
     func textChanged(_ textCell: NETextCell, newText: String) {
         print("DEBUG: Setting name of the category to [\(newText)]")
-        category.name = newText
+        event.text = newText
     }
 }
