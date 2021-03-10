@@ -11,13 +11,19 @@ import UIKit
 protocol NewCategoryCellDelegate {
 //    func textChanged(_ textCell: NewCategoryCell, withTextField textField: UITextField, newText: String)
 //    func didBeginEditing(_ textCell: NewCategoryCell, withTextField textField: UITextField)
-    func didEndEditing(_ textCell: NewCategoryCell, withTextField textField: UITextField)
+    func didEndEditing(_ categoryCell: NewCategoryCell, withTextField textField: UITextField)
 }
 
 class NewCategoryCell: UITableViewCell {
 
     // MARK: - Properties
     var delegate: NewCategoryCellDelegate?
+    
+    private var pickedColor: UIColor?
+    
+    var colorCategory: UIColor? {
+        return pickedColor
+    }
     
     lazy var textCategory: UITextField = {
         let text = UITextField()
@@ -92,6 +98,7 @@ class NewCategoryCell: UITableViewCell {
         
         colorSlider.minimumTrackTintColor = color
         colorSlider.thumbTintColor = color
+        pickedColor = color
     }
 
     /*

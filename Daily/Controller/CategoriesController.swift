@@ -379,15 +379,16 @@ extension CategoriesController: UITableViewDelegate, UITableViewDataSource {
 // MARK: - NETextCellDelegate
 extension CategoriesController: NewCategoryCellDelegate {
     
-    func didEndEditing(_ textCell: NewCategoryCell, withTextField textField: UITextField) {
+    func didEndEditing(_ categoryCell: NewCategoryCell, withTextField textField: UITextField) {
         guard let newText = textField.text, !newText.isEmpty else { return }
         
         // Save category
         print("DEBUG: Save category \(newText)")
         do {
             let newCategory = Category(name: newText)
+            newCategory.color = categoryCell.colorCategory
             try PersistentManager.shared.addCategory(newCategory)
-            textCell.clearTextField()
+            categoryCell.clearTextField()
 
         } catch {
             // TODO: - Show error message

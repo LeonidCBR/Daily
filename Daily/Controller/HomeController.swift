@@ -25,7 +25,7 @@ class HomeController: BaseController {
     //private let headerHeight: CGFloat = 150.0
     private let headerPadding: CGFloat = 20.0
     
-    private var events: [Event] = []
+    private var events: Results<Event>?
 //        [
 //        Event(text: "test event 1", datetime: Date(),
 //              category: ECategory(name: "test cat", color: UIColor.blue)),
@@ -268,12 +268,14 @@ class HomeController: BaseController {
     
     // numberOfRowsInSection
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        events.count
+        events?.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.eventCell, for: indexPath) as! EventCell
-        cell.eventText.text = events[indexPath.row].text
+        if let event = events?[indexPath.row] {
+            cell.eventText.text = event.text
+        }
         return cell
     }
     
