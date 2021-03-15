@@ -26,12 +26,12 @@ class NEDatePickerCell: UITableViewCell {
         clipsToBounds = true
         
         // height - 216
-        addSubview(datePicker)
-        datePicker.anchor(leading: leadingAnchor,
-                          trailing: trailingAnchor,
+        contentView.addSubview(datePicker)
+        datePicker.anchor(leading: contentView.leadingAnchor,
+                          trailing: contentView.trailingAnchor,
                           height: K.Height.rowDatePicker,
-                          centerX: centerXAnchor, // realy need???      ?????
-                          centerY: centerYAnchor)
+                          centerX: contentView.centerXAnchor, // realy need???      ?????
+                          centerY: contentView.centerYAnchor)
     }
     
     required init?(coder: NSCoder) {

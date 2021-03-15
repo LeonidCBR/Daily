@@ -19,13 +19,13 @@ import RealmSwift
 // TODO: - inherit from UITableView!!!
 
 
-class NewEventController: UIViewController {
+class NewEventController: UITableViewController {
 
     // MARK: - Properties
  
     private var categories: Results<Category>?
-    
-    private let event = Event()
+    private var category: Category?
+    private var eventText: String?
 
 /*
     private let textCellIdentifier = "NETextCell"
@@ -49,6 +49,7 @@ class NewEventController: UIViewController {
     
     
     // MARK: - UI Properties
+ /*
     private let headerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -79,15 +80,16 @@ class NewEventController: UIViewController {
         button.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         return button
     }()
+*/
     
-    private let mainTable: UITableView = {
-        let tableView = UITableView()
-        tableView.backgroundColor = .mainBlue
-        tableView.separatorStyle = .singleLine
-        tableView.separatorInset.left = 0
-        tableView.separatorInset.right = 0
-        return tableView
-    }()
+//    private let mainTable: UITableView = {
+//        let tableView = UITableView()
+//        tableView.backgroundColor = .mainBlue
+//        tableView.separatorStyle = .singleLine
+//        tableView.separatorInset.left = 0
+//        tableView.separatorInset.right = 0
+//        return tableView
+//    }()
     
     
     // MARK: - Lifecycle
@@ -95,25 +97,19 @@ class NewEventController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-//        title = "New event"
-        view.backgroundColor = .mainBlue
         
 //        let tbItem = UITabBarItem(title: "New event", image: nil, tag: 1)
 //        tabBarItem = tbItem
         
-        // Register cells
-        mainTable.register(NETextCell.self, forCellReuseIdentifier: K.Identifier.textCell)
-        mainTable.register(NELabelsCell.self, forCellReuseIdentifier: K.Identifier.labelsCell)
-        mainTable.register(NEPickerCell.self, forCellReuseIdentifier: K.Identifier.pickerCell)
-        mainTable.register(NEDatePickerCell.self, forCellReuseIdentifier: K.Identifier.datePickerCell)
-        mainTable.register(NEToggleCell.self, forCellReuseIdentifier: K.Identifier.toggleCell)
-        
+
         // Set up delegate
-        mainTable.delegate = self
-        mainTable.dataSource = self
+//        tableView.delegate = self
+//        tableView.dataSource = self
         
+        configureTableView()
         configureUI()
         configureTap()
+        loadCategories()
     }
     
 //    override func viewDidAppear(_ animated: Bool) {
@@ -124,8 +120,37 @@ class NewEventController: UIViewController {
     
     // MARK: - Methods
     
+    private func loadCategories() {
+        print("DEBUG: loading categories...")
+        
+        categories = PersistentManager.shared.fetchCategories()
+        category = categories?.first
+    }
+    
+    private func configureTableView() {
+        tableView.backgroundColor = .mainBlue
+        tableView.separatorStyle = .singleLine
+        tableView.separatorInset.left = 0
+        tableView.separatorInset.right = 0
+        
+        // Register cells
+        tableView.register(NETextCell.self, forCellReuseIdentifier: K.Identifier.textCell)
+        tableView.register(NELabelsCell.self, forCellReuseIdentifier: K.Identifier.labelsCell)
+        tableView.register(NEPickerCell.self, forCellReuseIdentifier: K.Identifier.pickerCell)
+        tableView.register(NEDatePickerCell.self, forCellReuseIdentifier: K.Identifier.datePickerCell)
+        tableView.register(NEToggleCell.self, forCellReuseIdentifier: K.Identifier.toggleCell)
+        
+    }
+    
     private func configureUI() {
         
+        title = "New Event"
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTapped))
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveButtonTapped))
+        
+        /*
         view.addSubview(headerView)
         headerView.anchor(top: view.topAnchor,
                           leading: view.leadingAnchor,
@@ -142,12 +167,12 @@ class NewEventController: UIViewController {
         headerView.addSubview(saveButton)
         saveButton.anchor(trailing: headerView.trailingAnchor, paddingTrailing: 20,
                           centerY: headerView.centerYAnchor)
-        
-        view.addSubview(mainTable)
-        mainTable.anchor(top: headerView.bottomAnchor, paddingTop: 20,
-                         bottom: view.safeAreaLayoutGuide.bottomAnchor, // view.layoutMarginsGuide.bottomAnchor,
-                         leading: view.leadingAnchor,
-                         trailing: view.trailingAnchor)
+        */
+//        view.addSubview(mainTable)
+//        mainTable.anchor(top: headerView.bottomAnchor, paddingTop: 20,
+//                         bottom: view.safeAreaLayoutGuide.bottomAnchor, // view.layoutMarginsGuide.bottomAnchor,
+//                         leading: view.leadingAnchor,
+//                         trailing: view.trailingAnchor)
 
     }
     
@@ -167,6 +192,7 @@ class NewEventController: UIViewController {
     
     
     // MARK: - Selectors
+    
     @objc func cancelButtonTapped() {
         dismiss(animated: true, completion: nil)
     }
@@ -174,15 +200,24 @@ class NewEventController: UIViewController {
     
     @objc func saveButtonTapped() {
         print("DEBUG: Save button is tapped...")
+        self.view.endEditing(true)
+        
+        guard let eventText = eventText else {
+            // TODO: - Show message
+            print("DEBUG: - Event's text is empty!")
+            return
+        }
         
 //        UIView.animate(withDuration: 0.3) {
 //            self.alertDate.heightAnchor.constraint(equalToConstant: 0).isActive = true
 //            self.view.layoutIfNeeded()
 //        }
-        
-        //let category = Category(name: "YAHOO")
-        
+
         do {
+//            let fake = Category(name: "YAHOO")
+//            try PersistentManager.shared.addCategory(fake)
+            
+            let event = Event(text: eventText, category: category)
             try PersistentManager.shared.addEvent(event)
             dismiss(animated: true)
 
@@ -198,36 +233,21 @@ class NewEventController: UIViewController {
         // Hide alert
         UIView.animate(withDuration: 0.3) {
             self.alertLabelHeight = self.alertLabelHeight == 0 ? K.Height.row : 0
-            self.mainTable.beginUpdates()
-            self.mainTable.endUpdates()
+            self.tableView.beginUpdates()
+            self.tableView.endUpdates()
         }
     }
 
-
-
-}
-
-
-// MARK: - UITableViewDelegate, UITableViewDataSource
-extension NewEventController: UITableViewDelegate, UITableViewDataSource {
     
-    // TODO: - That does NOT work
-//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-//        print("set")
-//        return 50.0
-//    }
+    // MARK: - Table view data source
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        // TODO: - MAKE REFACTORING!
         return 4
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        
-        
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // TODO: - MAKE REFACTORING!
-        
-        
         switch section {
         case 0:
             // Text of the new event
@@ -244,18 +264,11 @@ extension NewEventController: UITableViewDelegate, UITableViewDataSource {
         default:
             fatalError("Wrong number of sections")
         }
-        
-        //return 8 // !!! check
     }
     
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 //        let cell: UITableViewCell
-        
         // TODO: - MAKE REFACTORING!
-        
-        
         switch indexPath.section {
         case 0:
             // Create cell for text of new event
@@ -268,7 +281,7 @@ extension NewEventController: UITableViewDelegate, UITableViewDataSource {
                 // Create cell for chosen category
                 let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.labelsCell, for: indexPath) as! NELabelsCell
                 cell.leftLabel.text = "Категория:"
-                cell.rightLabel.text = "Важное"
+                cell.rightLabel.text = category?.name //"Важное"
                 return cell
                 
             } else {
@@ -323,81 +336,11 @@ extension NewEventController: UITableViewDelegate, UITableViewDataSource {
             fatalError("Wrong number of sections")
         }
         
-        /*
-        switch indexPath.row {
-            
-        case 0:
-            // Create cell for text of new event
-//            cell = tableView.dequeueReusableCell(withIdentifier: textCellIdentifier, for: indexPath)
-            let cell = tableView.dequeueReusableCell(withIdentifier: textCellIdentifier, for: indexPath) as! NETextCell
-            return cell
-            
-        case 1:
-            // Create cell for chosen category
-//            cell = tableView.dequeueReusableCell(withIdentifier: labelsCellIdentifier, for: indexPath)
-//            (cell as! NELabelsCell).toggle.isHidden = true
-//            (cell as! NELabelsCell).leftLabel.text = "Категория:"
-//            (cell as! NELabelsCell).rightLabel.text = "Важное"
-            let cell = tableView.dequeueReusableCell(withIdentifier: labelsCellIdentifier, for: indexPath) as! NELabelsCell
-            cell.leftLabel.text = "Категория:"
-            cell.rightLabel.text = "Важное"
-            return cell
-            
-        case 2:
-            let cell = tableView.dequeueReusableCell(withIdentifier: pickerCellIdentifier, for: indexPath) as! NEPickerCell
-//            cell.pickerView.dataSource = self
-            return cell
-            
-        case 3:
-            // Create cell for date of new event
-//            cell = tableView.dequeueReusableCell(withIdentifier: labelsCellIdentifier, for: indexPath)
-//            (cell as! NELabelsCell).leftLabel.text = "Дата:"
-//            (cell as! NELabelsCell).rightLabel.text = "12.05.2020"
-            let cell = tableView.dequeueReusableCell(withIdentifier: labelsCellIdentifier, for: indexPath) as! NELabelsCell
-            cell.leftLabel.text = "Дата:"
-            cell.rightLabel.text = "12.05.2020"
-            return cell
-            
-        case 4:
-            // event's date picker
-            let cell = tableView.dequeueReusableCell(withIdentifier: datePickerCellIdentifier, for: indexPath) as! NEDatePickerCell
-            cell.datePicker.datePickerMode = .date
-            return cell
-            
-        case 5:
-            // Create cell for reminder
-//            cell = tableView.dequeueReusableCell(withIdentifier: labelsCellIdentifier, for: indexPath)
-//            cell = NELabelsCell(style: .default, reuseIdentifier: labelsCellIdentifier, showToggle: true)
-//            (cell as! NELabelsCell).leftLabel.text = "Напомнить:"
-//            (cell as! NELabelsCell).rightLabel.text = "Нет" //"13.05.2020 14:30"
-            let cell = tableView.dequeueReusableCell(withIdentifier: toggleCellIdentifier, for: indexPath) as! NEToggleCell
-            cell.label.text = "Напомнить"
-            return cell
-            
-        case 6:
-            let cell = NELabelsCell()
-            cell.leftLabel.text = "Alert"
-            cell.rightLabel.text = "12.05.2020 12:35"
-            return cell
-            
-        case 7:
-            let cell = NEDatePickerCell()
-            cell.datePicker.datePickerMode = .dateAndTime
-            return cell
-            
-        default:
-            fatalError("Wrong number of rows!")
-//            let cell = UITableViewCell()
-//            cell.backgroundColor = .systemPink
-//            return cell
-        }
-        */
-//        return cell
     }
     
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // check indexPath and hide or show rows
+        // TODO: - MAKE REFACTORING!
         
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -431,8 +374,9 @@ extension NewEventController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        // TODO: - MAKE REFACTORING!
         
         /*
          Section 0 -> Event text
@@ -451,32 +395,8 @@ extension NewEventController: UITableViewDelegate, UITableViewDataSource {
         default: return K.Height.row
         }
         
-        // !!!!
-//        return K.Height.row
-        
-        
-        //        if indexPath.section == 1 && indexPath.row == 1 {
-        //            return categoriesHeight //rowPickerViewHeight
-        //
-        //        } else if indexPath.section == 2 && indexPath.row == 1 {
-        //            return eventDateHeight //rowDatePickerHeight
-        //
-        //        } else if indexPath.section == 3 {
-        //            if indexPath.row == 1 {
-        //                return alertLabelHeight
-        //
-        //            } else if indexPath.row == 2 {
-        //                return alertTimeHeight
-        //            }
-        //            //        } else if indexPath.row == 0 {
-        //        } else if indexPath.section == 0 && indexPath.row == 0 {
-        //            // set up the height of the cell with text field
-        //            return K.Height.rowTextField
-        //
-        //        } else {
-        //            return K.Height.row
-        //        }
     }
+
 }
 
 
@@ -487,16 +407,20 @@ extension NewEventController: UIPickerViewDataSource, UIPickerViewDelegate {
         return 1
     }
     
-    
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return categories?.count ?? 0
     }
     
-//    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-//
-//    }
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return categories?[row].name
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        //print("DEBUG: pickerView selected row \(row)")
+        category = categories?[row]
+        // TODO: - Make refactor!
+        let indexPath = IndexPath(row: 0, section: 1)
+        tableView.reloadRows(at: [indexPath], with: .fade)
     }
     
 }
@@ -504,8 +428,7 @@ extension NewEventController: UIPickerViewDataSource, UIPickerViewDelegate {
 
 // MARK: - NETextCellDelegate
 extension NewEventController: NETextCellDelegate {
-    func textChanged(_ textCell: NETextCell, newText: String) {
-        print("DEBUG: Setting name of the category to [\(newText)]")
-        event.text = newText
+    func textChanged(_ textCell: NETextCell, newText: String?) {
+        eventText = newText
     }
 }

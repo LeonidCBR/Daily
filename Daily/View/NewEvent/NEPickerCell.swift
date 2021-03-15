@@ -21,12 +21,12 @@ class NEPickerCell: UITableViewCell {
         backgroundColor = .mainBlue
         clipsToBounds = true
         
-        addSubview(pickerView)
-        pickerView.anchor(leading: leadingAnchor,
-                          trailing: trailingAnchor,
+        contentView.addSubview(pickerView)
+        pickerView.anchor(leading: contentView.leadingAnchor,
+                          trailing: contentView.trailingAnchor,
                           height: K.Height.rowPickerView,
-                          centerX: centerXAnchor,
-                          centerY: centerYAnchor)
+                          centerX: contentView.centerXAnchor,
+                          centerY: contentView.centerYAnchor)
     }
     
     required init?(coder: NSCoder) {

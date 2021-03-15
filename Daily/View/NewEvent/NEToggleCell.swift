@@ -27,13 +27,13 @@ class NEToggleCell: UITableViewCell {
         backgroundColor = .mainBlue
         clipsToBounds = true
         
-        addSubview(label)
-        label.anchor(leading: layoutMarginsGuide.leadingAnchor,
-                         centerY: centerYAnchor)
+        contentView.addSubview(label)
+        label.anchor(leading: contentView.layoutMarginsGuide.leadingAnchor,
+                     centerY: contentView.centerYAnchor)
         
-        addSubview(toggle)
-        toggle.anchor(trailing: layoutMarginsGuide.trailingAnchor,
-                          centerY: centerYAnchor)
+        contentView.addSubview(toggle)
+        toggle.anchor(trailing: contentView.layoutMarginsGuide.trailingAnchor,
+                      centerY: contentView.centerYAnchor)
     }
     
     required init?(coder: NSCoder) {

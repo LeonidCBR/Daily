@@ -15,7 +15,7 @@ class Category: Object {
     @objc dynamic var _id: ObjectId = ObjectId.generate()
     @objc dynamic var name: String = ""
     @objc dynamic var colorHex: String = UIColor.blue.toHexString()
-    let events = List<Event>();
+    //let events = List<Event>();
     
 //    var image: UIImage?
     var color: UIColor? {

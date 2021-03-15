@@ -16,7 +16,8 @@ class Event: Object {
     @objc dynamic var text: String = ""
     
     // let ?
-    var category = LinkingObjects(fromType: Category.self, property: "events")
+    //var category = LinkingObjects(fromType: Category.self, property: "events")
+    @objc dynamic var category: Category? = nil
 //    let datetime: Date
     //let category: ECategory
     
@@ -27,5 +28,11 @@ class Event: Object {
     convenience init(text: String) {
         self.init()
         self.text = text
+    }
+    
+    convenience init(text: String, category: Category?) {
+        self.init()
+        self.text = text
+        self.category = category
     }
 }

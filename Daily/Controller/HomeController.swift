@@ -320,7 +320,8 @@ class HomeController: BaseController {
     // MARK: - Selectors
     
     @objc func handleNewEventButtonTapped() {
-        present(NewEventController(), animated: true, completion: nil)
+        let newEventNavigationController = UINavigationController(rootViewController: NewEventController())
+        present(newEventNavigationController, animated: true, completion: nil)
     }
     
     
@@ -335,7 +336,7 @@ class HomeController: BaseController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.Identifier.eventCell, for: indexPath) as! EventCell
         if let event = events?[indexPath.row] {
-            cell.eventText.text = event.text
+            cell.eventText.text = event.text + " (\(event.category?.name ?? ""))"
         }
         return cell
     }

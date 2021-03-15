@@ -31,13 +31,13 @@ class NELabelsCell: UITableViewCell {
         backgroundColor = .mainBlue
         clipsToBounds = true
         
-        addSubview(leftLabel)
-        leftLabel.anchor(leading: layoutMarginsGuide.leadingAnchor,
-                         centerY: centerYAnchor)
+        contentView.addSubview(leftLabel)
+        leftLabel.anchor(leading: contentView.layoutMarginsGuide.leadingAnchor,
+                         centerY: contentView.centerYAnchor)
         
-        addSubview(rightLabel)
-        rightLabel.anchor(trailing: layoutMarginsGuide.trailingAnchor,
-                          centerY: centerYAnchor)
+        contentView.addSubview(rightLabel)
+        rightLabel.anchor(trailing: contentView.layoutMarginsGuide.trailingAnchor,
+                          centerY: contentView.centerYAnchor)
     }
     
     required init?(coder: NSCoder) {
